@@ -10,19 +10,40 @@ const team = [
 ];
 
 const features = [
-  { icon: <Bot className="w-8 h-8 text-blue-600" />, title: "AI-Powered Shopping", desc: "Personalized recommendations and smart price negotiation." },
-  { icon: <Search className="w-8 h-8 text-purple-600" />, title: "Visual & Smart Search", desc: "Find products by text or image instantly." },
-  { icon: <Zap className="w-8 h-8 text-yellow-500" />, title: "Flash Deals & Bargains", desc: "Exclusive deals, flash sales, and AI-powered price drops." },
-  { icon: <Shield className="w-8 h-8 text-green-600" />, title: "Secure & Trusted", desc: "Bank-level security and trusted sellers." },
-  { icon: <ShoppingCart className="w-8 h-8 text-pink-600" />, title: "Seamless Shopping", desc: "Easy checkout, fast delivery, and real-time order tracking." },
-  { icon: <Star className="w-8 h-8 text-yellow-400" />, title: "Top-Rated Support", desc: "24/7 customer support and satisfaction guarantee." },
+  { icon: <Bot className="w-8 h-8 text-blue-600" />, title: "Personal Shopping Assistant", desc: "Our smart assistant helps you find what you love, just for you." },
+  { icon: <Search className="w-8 h-8 text-purple-600" />, title: "Easy Search", desc: "Look for products by typing or uploading a photo—it's that simple!" },
+  { icon: <Zap className="w-8 h-8 text-yellow-500" />, title: "Big Savings & Special Offers", desc: "Enjoy daily deals, special discounts, and surprise price drops." },
+  { icon: <Shield className="w-8 h-8 text-green-600" />, title: "Safe & Secure Shopping", desc: "Your information is always protected and private with us." },
+  { icon: <ShoppingCart className="w-8 h-8 text-pink-600" />, title: "Smooth Shopping Experience", desc: "Shop easily, pay quickly, and get your order fast." },
+  { icon: <Star className="w-8 h-8 text-yellow-400" />, title: "Friendly Support", desc: "Our team is here to help you anytime you need it." },
 ];
 
 const timeline = [
-  { year: "2022", event: "Idea for an AI-driven e-commerce platform is born." },
-  { year: "2023", event: "Prototype launched with smart search and recommendations." },
-  { year: "2024", event: "Full platform launch with AI bargaining, flash sales, and more." },
-  { year: "Future", event: "Expanding to global markets and new AI features." },
+  { year: "2022", event: "We dreamed of making online shopping easier and more fun for everyone." },
+  { year: "2023", event: "We built our first version and started helping people find great products." },
+  { year: "2024", event: "We launched new features like smart deals and a helpful shopping assistant." },
+  { year: "Future", event: "We want to bring even more helpful tools and reach shoppers everywhere!" },
+];
+
+const faqs = [
+  { q: "What makes AI Commerce different?", a: "We help you find the best products and deals, just for you. Our smart assistant makes shopping easy and fun!" },
+  { q: "Is my information safe?", a: "Yes! We keep your details private and never share them with anyone else." },
+  { q: "How do I get a better price?", a: "Look out for our special offers and daily deals. You can also chat with our assistant for tips!" },
+  { q: "How can I get help?", a: "You can contact us anytime through our website or live chat. We're always happy to help!" },
+];
+
+const testimonials = [
+  { name: "Sarah Johnson", quote: "AI Commerce found me the perfect phone at a great price! The AI negotiation was so easy.", img: "/placeholder-user.jpg" },
+  { name: "David Kim", quote: "I love the smart search and flash deals. Shopping here feels futuristic!", img: "/placeholder-user.jpg" },
+  { name: "Emily Chen", quote: "Customer support was super helpful and the delivery was fast. Highly recommend!", img: "/placeholder-user.jpg" },
+];
+
+const partners = [
+  { name: "TechBrand", logo: "/placeholder-logo.png" },
+  { name: "ShopEase", logo: "/placeholder-logo.png" },
+  { name: "SmartGadgets", logo: "/placeholder-logo.png" },
+  { name: "FashionPro", logo: "/placeholder-logo.png" },
+  { name: "HomePlus", logo: "/placeholder-logo.png" },
 ];
 
 export default function AboutPage() {
@@ -87,6 +108,46 @@ export default function AboutPage() {
         <div className="flex flex-col md:flex-row gap-4 justify-center">
           <a href="/products" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-lg transition-transform hover:scale-105">Start Shopping</a>
           <a href="/contact" className="bg-white dark:bg-gray-900 border border-blue-600 text-blue-600 font-bold px-8 py-3 rounded-lg shadow-lg transition-transform hover:scale-105">Contact Us</a>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {faqs.map((faq, i) => (
+            <div key={faq.q} className="bg-white/80 dark:bg-gray-900/80 rounded-xl shadow p-6 animate-fadeInUp" style={{ animationDelay: `${i * 80}ms` }}>
+              <h3 className="text-lg font-semibold mb-2">{faq.q}</h3>
+              <p className="text-gray-600 dark:text-gray-300">{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8 text-center">What Our Customers Say</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {testimonials.map((t, i) => (
+            <div key={t.name} className="flex flex-col items-center bg-white/80 dark:bg-gray-900/80 rounded-xl shadow p-6 animate-fadeInUp" style={{ animationDelay: `${i * 80}ms` }}>
+              <Image src={t.img} alt={t.name} width={60} height={60} className="rounded-full mb-3" />
+              <p className="italic text-gray-700 dark:text-gray-200 mb-2">"{t.quote}"</p>
+              <h4 className="font-semibold text-blue-600">{t.name}</h4>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8 text-center">Our Partners</h2>
+        <div className="flex flex-wrap justify-center items-center gap-8">
+          {partners.map((p, i) => (
+            <div key={p.name} className="flex flex-col items-center animate-fadeInUp" style={{ animationDelay: `${i * 80}ms` }}>
+              <Image src={p.logo} alt={p.name} width={80} height={80} className="mb-2" />
+              <span className="text-gray-500 dark:text-gray-300 text-sm">{p.name}</span>
+            </div>
+          ))}
         </div>
       </section>
 
