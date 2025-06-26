@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -20,10 +20,21 @@ import {
   ShoppingCart,
 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
 
 export default function SellerDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
   const { toast } = useToast()
+  const router = useRouter()
+
+  // Mock authentication check
+  useEffect(() => {
+    // Replace this with your real auth logic
+    const isSellerLoggedIn = typeof window !== 'undefined' && localStorage.getItem('isSellerLoggedIn') === 'true';
+    if (!isSellerLoggedIn) {
+      router.replace("/auth/login?seller=1")
+    }
+  }, [router])
 
   // Mock data
   const stats = {

@@ -10,13 +10,16 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Sparkles, User, Store, Shield, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const sellerParam = searchParams.get("seller")
+  const [tab, setTab] = useState(sellerParam === "1" ? "seller" : "customer")
 
   const handleLogin = async (userType: string) => {
     setIsLoading(true)
@@ -69,7 +72,7 @@ export default function LoginPage() {
             <CardDescription>Choose your account type to sign in</CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="customer" className="w-full">
+            <Tabs value={tab} onValueChange={setTab} className="w-full">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="customer" className="flex items-center gap-2">
                   <User className="w-4 h-4" />
