@@ -14,6 +14,7 @@ const categoryData = [
   { name: "Kids Boys", icon: "🧒", desc: "Fun and comfy picks for boys.", badge: "" },
   { name: "Kids Girls", icon: "👧", desc: "Cute and stylish for girls.", badge: "" },
   { name: "Shoes", icon: "👟", desc: "Step up with our shoe collection.", badge: "Hot" },
+  { name: "Phones and Accessories", icon: "📱", desc: "Latest smartphones and must-have accessories.", badge: "New" },
 ];
 
 const categoriesWithCounts = categoryData

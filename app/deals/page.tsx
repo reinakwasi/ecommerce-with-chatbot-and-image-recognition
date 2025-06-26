@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Star, Heart, ShoppingCart, Clock, Zap } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 function getDiscountPercent(original: number, sale: number) {
   return Math.round(((original - sale) / original) * 100);
@@ -57,63 +58,6 @@ export default function DealsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Flash Sale Banner */}
-      <section className="relative py-8 flex flex-col items-center justify-center text-center bg-gradient-to-r from-pink-600/90 to-yellow-400/90 mb-8 overflow-hidden animate-fadeIn">
-        <div className="absolute inset-0 bg-[url('/placeholder.svg')] bg-cover bg-center opacity-10 pointer-events-none" />
-        <div className="flex items-center gap-4 mb-2">
-          <Zap className="w-8 h-8 text-yellow-300 animate-pulse" />
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white drop-shadow">Flash Sale!</h2>
-        </div>
-        <p className="text-lg md:text-xl text-white/90 max-w-xl mx-auto mb-4 animate-fadeIn delay-100">
-          Limited time only! Grab these deals before they're gone.
-        </p>
-        <div className="flex items-center gap-2 justify-center mb-4">
-          <Clock className="w-5 h-5 text-white" />
-          <span className="text-white font-bold text-lg">{hours}h {minutes}m {seconds}s left</span>
-        </div>
-        <Button className="bg-yellow-400 hover:bg-yellow-500 text-pink-900 font-bold px-8 py-2 rounded-lg shadow-lg animate-bounce" onClick={() => setFlashModalOpen(true)}>
-          Shop Flash Sale
-        </Button>
-        {/* Flash Sale Modal */}
-        {flashModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 animate-fadeIn">
-            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-2xl w-full p-8 relative animate-fadeInUp flex flex-col">
-              <button
-                onClick={() => setFlashModalOpen(false)}
-                className="absolute top-3 right-3 text-gray-500 hover:text-gray-900 text-xl"
-                aria-label="Close"
-              >
-                &times;
-              </button>
-              <h3 className="text-2xl font-bold mb-4 flex items-center gap-2"><Zap className="w-6 h-6 text-yellow-400" /> Flash Sale Deals</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4">
-                {flashSaleProducts.map(product => (
-                  <Card key={product.id} className="border-0 shadow-xl bg-white/90 dark:bg-gray-900/80">
-                    <CardContent className="p-4 flex flex-col items-center">
-                      <Image src={product.image} alt={product.name} width={100} height={100} className="rounded-lg mb-2 object-cover" />
-                      <h4 className="font-semibold mb-1 text-center">{product.name}</h4>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-pink-600 font-bold text-lg">${product.price.toFixed(2)}</span>
-                        {product.originalPrice && (
-                          <span className="text-gray-500 line-through">${product.originalPrice.toFixed(2)}</span>
-                        )}
-                        {product.originalPrice && (
-                          <Badge className="bg-yellow-400 text-white font-bold">-{getDiscountPercent(product.originalPrice, product.price)}%</Badge>
-                        )}
-                      </div>
-                      <Button className="bg-pink-600 hover:bg-pink-700 text-white font-semibold w-full mt-2"><ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart</Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-              <Button className="bg-yellow-400 hover:bg-yellow-500 text-pink-900 font-bold px-8 py-2 rounded-lg shadow-lg mt-auto" onClick={() => setFlashModalOpen(false)}>
-                Close
-              </Button>
-            </div>
-          </div>
-        )}
-      </section>
-
       {/* Hero Banner */}
       <section className="relative py-12 flex flex-col items-center justify-center text-center bg-gradient-to-r from-pink-500/90 to-yellow-400/90 mb-12 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/placeholder.svg')] bg-cover bg-center opacity-10 pointer-events-none" />
