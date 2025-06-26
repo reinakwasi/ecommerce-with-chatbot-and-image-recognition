@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -14,6 +15,9 @@ import { useToast } from "@/hooks/use-toast"
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
+  const searchParams = useSearchParams()
+  const sellerParam = searchParams.get("seller")
+  const [tab, setTab] = useState(sellerParam === "1" ? "seller" : "customer")
 
   const handleRegister = async (userType: string) => {
     setIsLoading(true)
@@ -51,7 +55,7 @@ export default function RegisterPage() {
             <CardDescription>Choose your account type to get started</CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="customer" className="w-full">
+            <Tabs value={tab} onValueChange={setTab} className="w-full">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="customer" className="flex items-center gap-2">
                   <User className="w-4 h-4" />

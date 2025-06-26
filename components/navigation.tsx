@@ -116,27 +116,17 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-4">
-              {/* Search Button */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsSearchOpen(true)}
-                className="relative"
-              >
-                <Search className="w-4 h-4" />
-                <span className="sr-only">Search</span>
-              </Button>
-
               {/* Notifications */}
-              <Button variant="ghost" size="sm" className="relative">
+              <Button variant="ghost" size="sm" className="relative group" aria-label="Notifications">
                 <Bell className="w-4 h-4" />
-                <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs">3</Badge>
                 <span className="sr-only">Notifications</span>
+                <span className="absolute left-1/2 -bottom-7 -translate-x-1/2 scale-0 group-hover:scale-100 bg-gray-900 text-white text-xs rounded px-2 py-1 transition-all">Notifications</span>
+                <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs">3</Badge>
               </Button>
 
               {/* Wishlist */}
-              <Link href="/customer/wishlist">
-                <Button variant="ghost" size="sm" className="relative">
+              <Link href="/customer/wishlist" aria-label="Wishlist">
+                <Button variant="ghost" size="sm" className="relative group">
                   <Heart className="w-4 h-4" />
                   {wishlistCount > 0 && (
                     <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs">
@@ -144,12 +134,13 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
                     </Badge>
                   )}
                   <span className="sr-only">Wishlist</span>
+                  <span className="absolute left-1/2 -bottom-7 -translate-x-1/2 scale-0 group-hover:scale-100 bg-gray-900 text-white text-xs rounded px-2 py-1 transition-all">Wishlist</span>
                 </Button>
               </Link>
 
               {/* Cart */}
-              <Link href="/customer/cart">
-                <Button variant="ghost" size="sm" className="relative">
+              <Link href="/customer/cart" aria-label="Cart">
+                <Button variant="ghost" size="sm" className="relative group">
                   <ShoppingCart className="w-4 h-4" />
                   {cartCount > 0 && (
                     <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs">
@@ -157,6 +148,7 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
                     </Badge>
                   )}
                   <span className="sr-only">Cart</span>
+                  <span className="absolute left-1/2 -bottom-7 -translate-x-1/2 scale-0 group-hover:scale-100 bg-gray-900 text-white text-xs rounded px-2 py-1 transition-all">Cart</span>
                 </Button>
               </Link>
 
@@ -164,9 +156,10 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="relative">
+                    <Button variant="ghost" size="sm" className="relative group" aria-label="User menu">
                       <User className="w-4 h-4" />
                       <span className="sr-only">User menu</span>
+                      <span className="absolute left-1/2 -bottom-7 -translate-x-1/2 scale-0 group-hover:scale-100 bg-gray-900 text-white text-xs rounded px-2 py-1 transition-all">Account</span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">

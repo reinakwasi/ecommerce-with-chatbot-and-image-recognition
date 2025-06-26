@@ -4,6 +4,7 @@ import { Inter, Poppins } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
+import Footer from "@/components/footer"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -117,6 +118,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Footer />
           <Toaster />
         </ThemeProvider>
       </body>
