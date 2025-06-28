@@ -91,10 +91,10 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2 group">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold gradient-text-blue">AI Commerce</span>
+              <span className="text-xl font-bold gradient-text-warm">SmartShop</span>
             </Link>
 
             {/* Desktop Navigation Links */}
@@ -103,9 +103,9 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+                  className={`text-sm font-medium transition-colors hover:text-orange-600 dark:hover:text-orange-400 ${
                     isActive(item.href)
-                      ? "text-blue-600 dark:text-blue-400"
+                      ? "text-orange-600 dark:text-orange-400"
                       : "text-gray-700 dark:text-gray-300"
                   }`}
                 >
@@ -202,12 +202,6 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
                             My Products
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href="/seller/analytics" className="flex items-center">
-                            <BarChart3 className="w-4 h-4 mr-2" />
-                            Analytics
-                          </Link>
-                        </DropdownMenuItem>
                       </>
                     )}
                     {user.role === "admin" && (
@@ -234,9 +228,9 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600 dark:text-red-400">
+                    <DropdownMenuItem className="flex items-center text-red-600 dark:text-red-400">
                       <LogOut className="w-4 h-4 mr-2" />
-                      Sign out
+                      Sign Out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -244,91 +238,127 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
                 <div className="flex items-center space-x-2">
                   <Link href="/auth/login">
                     <Button variant="ghost" size="sm">
-                      Sign in
+                      Sign In
                     </Button>
                   </Link>
                   <Link href="/auth/register">
                     <Button size="sm" className="btn-primary">
-                      Get Started
+                      Sign Up
                     </Button>
                   </Link>
                 </div>
               )}
 
-              {/* Mobile Menu Button */}
-              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="md:hidden">
-                    <Menu className="w-4 h-4" />
-                    <span className="sr-only">Open menu</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                  <SheetHeader>
-                    <SheetTitle>Menu</SheetTitle>
-                  </SheetHeader>
-                  <div className="flex flex-col space-y-4 mt-6">
+              {/* Theme Toggle */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                aria-label="Toggle theme"
+              >
+                {theme === "light" ? (
+                  <div className="w-4 h-4 bg-gray-900 rounded-full" />
+                ) : (
+                  <div className="w-4 h-4 bg-yellow-400 rounded-full" />
+                )}
+              </Button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="md:hidden">
+                  <Menu className="w-5 h-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center space-x-2">
+                    <div className="w-6 h-6 bg-gradient-to-r from-orange-500 to-amber-500 rounded flex items-center justify-center">
+                      <Sparkles className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="gradient-text-warm">SmartShop</span>
+                  </SheetTitle>
+                </SheetHeader>
+                
+                <div className="mt-8 space-y-6">
+                  {/* Mobile Navigation */}
+                  <nav className="space-y-4">
                     {navigationItems.map((item) => (
                       <Link
                         key={item.name}
                         href={item.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`text-lg font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+                        className={`block text-lg font-medium transition-colors ${
                           isActive(item.href)
-                            ? "text-blue-600 dark:text-blue-400"
+                            ? "text-orange-600 dark:text-orange-400"
                             : "text-gray-700 dark:text-gray-300"
                         }`}
+                        onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.name}
                       </Link>
                     ))}
-                    <div className="pt-4 border-t">
-                      {user ? (
-                        <div className="space-y-2">
-                          <p className="text-sm font-medium">{user.name}</p>
-                          <p className="text-xs text-muted-foreground">{user.email}</p>
-                          <Button variant="outline" size="sm" className="w-full">
-                            Sign out
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          <Link href="/auth/login" className="block">
-                            <Button variant="outline" size="sm" className="w-full">
-                              Sign in
-                            </Button>
-                          </Link>
-                          <Link href="/auth/register" className="block">
-                            <Button size="sm" className="w-full btn-primary">
-                              Get Started
-                            </Button>
-                          </Link>
-                        </div>
-                      )}
+                  </nav>
+
+                  <div className="border-t pt-6">
+                    <div className="space-y-4">
+                      <Link href="/customer/cart" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <ShoppingCart className="w-5 h-5" />
+                        <span>Cart ({cartCount})</span>
+                      </Link>
+                      <Link href="/customer/wishlist" className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <Heart className="w-5 h-5" />
+                        <span>Wishlist ({wishlistCount})</span>
+                      </Link>
                     </div>
                   </div>
-                </SheetContent>
-              </Sheet>
-            </div>
+
+                  {user ? (
+                    <div className="border-t pt-6">
+                      <div className="space-y-4">
+                        <div className="p-3">
+                          <p className="font-medium">{user.name}</p>
+                          <p className="text-sm text-gray-500">{user.email}</p>
+                        </div>
+                        <Button variant="outline" className="w-full">
+                          Sign Out
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="border-t pt-6 space-y-3">
+                      <Link href="/auth/login">
+                        <Button variant="outline" className="w-full">
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link href="/auth/register">
+                        <Button className="w-full btn-primary">
+                          Sign Up
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>
 
-      {/* Search Modal */}
+      {/* Smart Search Overlay */}
       {isSearchOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center p-4">
-          <div className="w-full max-w-4xl mt-20">
-            <div className="relative">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsSearchOpen(false)}
-                className="absolute top-4 right-4 z-10"
-              >
-                <X className="w-4 h-4" />
-              </Button>
-              <SmartSearchBar />
-            </div>
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center pt-20 p-4">
+          <div className="w-full max-w-4xl">
+            <SmartSearchBar />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute top-4 right-4 text-white"
+              onClick={() => setIsSearchOpen(false)}
+            >
+              <X className="w-5 h-5" />
+            </Button>
           </div>
         </div>
       )}

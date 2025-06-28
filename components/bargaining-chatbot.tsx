@@ -42,7 +42,7 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
       const welcomeMessage: Message = {
         id: "1",
         type: "bot",
-        content: `Hello! I'm your AI shopping assistant. I see you're interested in the ${product.name} priced at $${product.price}. I'd be happy to help you find the best deal! What price were you hoping for?`,
+        content: `Hi there! I'm your friendly shopping assistant. I see you're interested in the ${product.name} for $${product.price}. I'd love to help you get a great deal! What price were you thinking?`,
         timestamp: new Date(),
       }
       setMessages([welcomeMessage])
@@ -68,21 +68,21 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
 
       if (offeredPrice >= currentPrice * 0.95) {
         // Accept offer if it's within 5% of current price
-        response = `Great! I can accept your offer of $${offeredPrice}. That's a fantastic deal! Would you like me to update the price and add it to your cart?`
+        response = `Perfect! I can do $${offeredPrice} for you. That's a fantastic deal! Would you like me to update the price and add it to your cart?`
         newPrice = offeredPrice
       } else if (offeredPrice >= currentPrice * 0.85) {
         // Counter-offer if it's within 15% of current price
         const counterOffer = Math.round(currentPrice * 0.9 * 100) / 100
-        response = `I appreciate your offer of $${offeredPrice}. While I can't go that low, I can offer you a special price of $${counterOffer}. That's still a ${Math.round(((product.price - counterOffer) / product.price) * 100)}% discount! What do you think?`
+        response = `Thanks for your offer of $${offeredPrice}! While I can't go quite that low, I can offer you a special price of $${counterOffer}. That's still a great ${Math.round(((product.price - counterOffer) / product.price) * 100)}% discount! What do you think?`
         newPrice = counterOffer
       } else if (offeredPrice >= currentPrice * 0.7) {
         // Negotiate if it's within 30% of current price
         const counterOffer = Math.round(currentPrice * 0.85 * 100) / 100
-        response = `I understand you're looking for a great deal! Your offer of $${offeredPrice} is quite low, but I want to help. How about $${counterOffer}? That's already a significant ${Math.round(((product.price - counterOffer) / product.price) * 100)}% off the original price!`
+        response = `I understand you're looking for a great deal! Your offer of $${offeredPrice} is quite low, but I want to help. How about $${counterOffer}? That's already a nice ${Math.round(((product.price - counterOffer) / product.price) * 100)}% off the original price!`
         newPrice = counterOffer
       } else {
         // Reject if too low
-        response = `I appreciate your interest, but $${offeredPrice} is below what I can offer. The lowest I can go is $${Math.round(currentPrice * 0.8 * 100) / 100}. This product has premium features and excellent reviews. Would you consider this price?`
+        response = `I appreciate your interest, but $${offeredPrice} is below what I can offer. The best I can do is $${Math.round(currentPrice * 0.8 * 100) / 100}. This product has great features and excellent reviews. Would you consider this price?`
         newPrice = Math.round(currentPrice * 0.8 * 100) / 100
       }
     } else if (
@@ -91,19 +91,19 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
       lowerMessage.includes("discount")
     ) {
       const bestPrice = Math.round(product.price * 0.85 * 100) / 100
-      response = `I can offer you our best price of $${bestPrice} for the ${product.name}. That's a ${Math.round(((product.price - bestPrice) / product.price) * 100)}% discount! This is a limited-time offer just for you.`
+      response = `I can offer you our best price of $${bestPrice} for the ${product.name}. That's a ${Math.round(((product.price - bestPrice) / product.price) * 100)}% discount! This is a special offer just for you.`
       newPrice = bestPrice
     } else if (lowerMessage.includes("yes") || lowerMessage.includes("accept") || lowerMessage.includes("deal")) {
-      response = `Excellent! I'm updating the price to $${currentPrice}. You're getting an amazing deal! Would you like me to add this to your cart now?`
+      response = `Excellent! I'm updating the price to $${currentPrice}. You're getting a great deal! Would you like me to add this to your cart now?`
     } else if (lowerMessage.includes("no") || lowerMessage.includes("too high") || lowerMessage.includes("expensive")) {
       const newOffer = Math.round(currentPrice * 0.95 * 100) / 100
-      response = `I understand. Let me see what I can do... How about $${newOffer}? I'm really trying to work with you here!`
+      response = `I understand. Let me see what I can do... How about $${newOffer}? I really want to make this work for you!`
       newPrice = newOffer
     } else {
       // General responses
       const responses = [
         `I'm here to help you get the best deal on the ${product.name}. What price point were you thinking?`,
-        `This product is really popular and has excellent reviews. What would make this purchase perfect for you?`,
+        `This product is really popular and has great reviews. What would make this purchase perfect for you?`,
         `I want to make sure you're happy with your purchase. What's your budget for this item?`,
         `Let me know what you're comfortable spending, and I'll see what I can do!`,
       ]
@@ -136,7 +136,7 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
     setInputValue("")
     setIsTyping(true)
 
-    // Simulate AI thinking time
+    // Simulate assistant thinking time
     setTimeout(() => {
       const botResponse = generateBotResponse(inputValue)
       setMessages((prev) => [...prev, botResponse])
@@ -159,10 +159,10 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
       <Card className="w-full max-w-md h-[600px] flex flex-col">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center">
               <Bot className="w-5 h-5 text-white" />
             </div>
-            AI Bargaining Assistant
+            Shopping Assistant
           </CardTitle>
           <Button variant="ghost" size="sm" onClick={onClose}>
             <X className="w-4 h-4" />
@@ -171,7 +171,7 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
 
         <CardContent className="flex-1 flex flex-col p-0">
           {/* Price Display */}
-          <div className="px-4 py-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 border-b">
+          <div className="px-4 py-3 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 border-b">
             <div className="text-center">
               <p className="text-sm text-gray-600 dark:text-gray-300">Current Offer</p>
               <p className="text-2xl font-bold text-green-600">${currentPrice}</p>
@@ -192,12 +192,12 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
                   <div
                     className={`max-w-[80%] rounded-lg p-3 ${
                       message.type === "user"
-                        ? "bg-blue-600 text-white"
+                        ? "bg-orange-600 text-white"
                         : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                     }`}
                   >
                     <div className="flex items-start gap-2">
-                      {message.type === "bot" && <Bot className="w-4 h-4 mt-0.5 text-blue-600" />}
+                      {message.type === "bot" && <Bot className="w-4 h-4 mt-0.5 text-orange-600" />}
                       {message.type === "user" && <User className="w-4 h-4 mt-0.5" />}
                       <div className="flex-1">
                         <p className="text-sm">{message.content}</p>
@@ -216,7 +216,7 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
                 <div className="flex justify-start">
                   <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[80%]">
                     <div className="flex items-center gap-2">
-                      <Bot className="w-4 h-4 text-blue-600" />
+                      <Bot className="w-4 h-4 text-orange-600" />
                       <div className="flex space-x-1">
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                         <div

@@ -8,12 +8,12 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold">AI Commerce</span>
+              <span className="text-xl font-bold">SmartShop</span>
             </div>
-            <p className="text-gray-400">The future of shopping with AI-powered experiences.</p>
+            <p className="text-gray-400">Smart shopping made simple and enjoyable for everyone.</p>
           </div>
 
           <div>
@@ -69,7 +69,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 AI Commerce. All rights reserved.</p>
+          <p>&copy; 2024 SmartShop. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Sparkles, User, Store, Shield, ArrowRight, Bot, Star, Lock, TrendingUp, CheckCircle, Check } from "lucide-react"
+import { Sparkles, User, Store, Shield, ArrowRight, Star, Lock, TrendingUp, CheckCircle, Check, Heart } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 
@@ -31,16 +31,16 @@ export default function RegisterPage() {
       setIsLoading(false)
       toast({
         title: "Registration successful!",
-        description: `Welcome to AI Commerce as a ${userType}!`,
+        description: `Welcome to SmartShop as a ${userType}!`,
       })
     }, 2000)
   }
 
   const benefits = [
-    { icon: <Bot className="w-5 h-5" />, text: "AI Shopping Assistant" },
+    { icon: <Heart className="w-5 h-5" />, text: "Smart Shopping Assistant" },
     { icon: <Star className="w-5 h-5" />, text: "Personalized Recommendations" },
     { icon: <Lock className="w-5 h-5" />, text: "Bank-level Security" },
-    { icon: <TrendingUp className="w-5 h-5" />, text: "Smart Deals & Savings" },
+    { icon: <TrendingUp className="w-5 h-5" />, text: "Amazing Deals & Savings" },
   ]
 
   const userTypes = [
@@ -48,8 +48,8 @@ export default function RegisterPage() {
       id: "customer",
       title: "Customer",
       icon: User,
-      color: "from-blue-500 to-cyan-500",
-      description: "Shop smarter with AI-powered recommendations",
+      color: "from-orange-500 to-amber-500",
+      description: "Shop smarter with personalized recommendations",
       fields: [
         { name: "fullName", label: "Full Name", type: "text", placeholder: "Enter your full name" },
         { name: "email", label: "Email Address", type: "email", placeholder: "Enter your email" },
@@ -62,7 +62,7 @@ export default function RegisterPage() {
       title: "Seller",
       icon: Store,
       color: "from-emerald-500 to-teal-500",
-      description: "Start selling and grow your business with AI tools",
+      description: "Start selling and grow your business with smart tools",
       fields: [
         { name: "businessName", label: "Business Name", type: "text", placeholder: "Enter your business name" },
         { name: "contactPerson", label: "Contact Person", type: "text", placeholder: "Enter contact person name" },
@@ -75,7 +75,7 @@ export default function RegisterPage() {
       id: "admin",
       title: "Admin",
       icon: Shield,
-      color: "from-purple-500 to-pink-500",
+      color: "from-teal-500 to-emerald-500",
       description: "Platform management and user support",
       fields: [
         { name: "fullName", label: "Full Name", type: "text", placeholder: "Enter your full name" },
@@ -89,21 +89,21 @@ export default function RegisterPage() {
   const currentType = userTypes.find(type => type.id === selectedType)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-gray-950 dark:via-gray-900 dark:to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
       <div className="w-full max-w-6xl">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
-            <span className="text-3xl font-bold text-gray-900 dark:text-white">AI Commerce</span>
+            <span className="text-3xl font-bold text-gray-900 dark:text-white">SmartShop</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
             Create Your Account
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Choose your account type and join thousands of users experiencing the future of shopping
+            Choose your account type and join thousands of users experiencing smart shopping
           </p>
         </div>
 
@@ -119,8 +119,8 @@ export default function RegisterPage() {
                 onClick={() => setSelectedType(type.id)}
                 className={`relative p-6 rounded-2xl cursor-pointer transition-all duration-300 ${
                   isSelected
-                    ? 'bg-white dark:bg-gray-800 shadow-2xl scale-105 border-2 border-teal-200 dark:border-teal-800'
-                    : 'bg-white/60 dark:bg-gray-800/60 shadow-lg hover:shadow-xl hover:scale-102'
+                    ? 'bg-white dark:bg-gray-800 shadow-soft scale-105 border-2 border-orange-200 dark:border-orange-800'
+                    : 'bg-white/60 dark:bg-gray-800/60 shadow-soft hover:shadow-lg hover:scale-102'
                 }`}
               >
                 <div className={`w-12 h-12 bg-gradient-to-r ${type.color} rounded-xl flex items-center justify-center mb-4`}>
@@ -130,7 +130,7 @@ export default function RegisterPage() {
                 <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{type.description}</p>
                 
                 {isSelected && (
-                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full flex items-center justify-center">
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center">
                     <Check className="w-4 h-4 text-white" />
                   </div>
                 )}
@@ -141,7 +141,7 @@ export default function RegisterPage() {
 
         {/* Registration Form */}
         {currentType && (
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-8 md:p-12 max-w-2xl mx-auto">
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-soft border border-white/20 dark:border-gray-700/50 p-8 md:p-12 max-w-2xl mx-auto">
             <div className="text-center mb-8">
               <div className={`w-16 h-16 bg-gradient-to-r ${currentType.color} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
                 <currentType.icon className="w-8 h-8 text-white" />
@@ -162,7 +162,7 @@ export default function RegisterPage() {
                     id={field.name}
                     type={field.type}
                     placeholder={field.placeholder}
-                    className="mt-2 border-gray-200 dark:border-gray-600 focus:border-teal-500 dark:focus:border-teal-400"
+                    className="mt-2 input-enhanced"
                   />
                 </div>
               ))}
@@ -171,11 +171,11 @@ export default function RegisterPage() {
                 <Checkbox id="terms" className="mt-1" />
                 <Label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                   I agree to the{" "}
-                  <Link href="/privacy" className="text-teal-600 hover:text-teal-700 font-medium">
+                  <Link href="/privacy" className="text-orange-600 hover:text-orange-700 font-medium">
                     Terms of Service
                   </Link>{" "}
                   and{" "}
-                  <Link href="/privacy" className="text-teal-600 hover:text-teal-700 font-medium">
+                  <Link href="/privacy" className="text-orange-600 hover:text-orange-700 font-medium">
                     Privacy Policy
                   </Link>
                 </Label>
@@ -200,32 +200,32 @@ export default function RegisterPage() {
               </Button>
             </form>
 
-            {/* Admin Warning */}
-            {currentType.id === "admin" && (
-              <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl">
-                <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-amber-600 mt-0.5" />
-                  <p className="text-sm text-amber-800 dark:text-amber-200">
-                    Admin accounts require approval. Please contact support for access.
-                  </p>
-                </div>
+            {/* Benefits Section */}
+            <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold mb-4 text-center text-gray-900 dark:text-white">
+                Why Choose SmartShop?
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                {benefits.map((benefit, index) => (
+                  <div key={index} className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                    <div className="text-orange-500">{benefit.icon}</div>
+                    <span>{benefit.text}</span>
+                  </div>
+                ))}
               </div>
-            )}
+            </div>
+
+            {/* Login Link */}
+            <div className="mt-8 text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Already have an account?{" "}
+                <Link href="/auth/login" className="text-orange-600 hover:underline font-semibold inline-flex items-center gap-1">
+                  Sign in <ArrowRight className="w-4 h-4" />
+                </Link>
+              </p>
+            </div>
           </div>
         )}
-
-        {/* Sign In Link */}
-        <div className="text-center mt-8">
-          <p className="text-gray-600 dark:text-gray-300">
-            Already have an account?{" "}
-            <Link 
-              href="/auth/login" 
-              className="text-teal-600 hover:text-teal-700 font-semibold inline-flex items-center gap-1 transition-colors"
-            >
-              Sign in <ArrowRight className="w-4 h-4" />
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   )

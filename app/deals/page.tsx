@@ -6,8 +6,9 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Star, Heart, ShoppingCart, Clock, Zap } from "lucide-react";
+import { Sparkles, Star, Heart, ShoppingCart, Clock, Zap, Navigation } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Navigation as NavComponent } from "@/components/navigation";
 
 function getDiscountPercent(original: number, sale: number) {
   return Math.round(((original - sale) / original) * 100);
@@ -15,21 +16,20 @@ function getDiscountPercent(original: number, sale: number) {
 
 const onSaleProducts = products.filter(p => p.isOnSale);
 const dealOfTheDay = onSaleProducts.length > 0 ? onSaleProducts[0] : null;
-const flashSaleProducts = onSaleProducts.slice(0, 4); // Mock: first 4 on-sale products
-const aiRecommendedDeals = onSaleProducts
+const flashSaleProducts = onSaleProducts.slice(0, 4);
+const recommendedDeals = onSaleProducts
   .filter(p => p.rating && p.rating >= 4.7)
-  .slice(0, 4); // Mock AI: top-rated deals
+  .slice(0, 4);
 
 export default function DealsPage() {
   const [category, setCategory] = useState("all");
   const [brand, setBrand] = useState("all");
   const [sort, setSort] = useState("discount");
   const [flashModalOpen, setFlashModalOpen] = useState(false);
-  const [countdown, setCountdown] = useState(3600); // 1 hour flash sale
+  const [countdown, setCountdown] = useState(3600);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  // Filtered and sorted deals
   const filteredDeals = useMemo(() => {
     let deals = onSaleProducts;
     if (category !== "all") deals = deals.filter(p => p.category === category);
@@ -40,7 +40,6 @@ export default function DealsPage() {
     return deals;
   }, [category, brand, sort]);
 
-  // Countdown for Deal of the Day and Flash Sale
   useState(() => {
     const interval = setInterval(() => setCountdown(c => (c > 0 ? c - 1 : 0)), 1000);
     return () => clearInterval(interval);
@@ -49,7 +48,6 @@ export default function DealsPage() {
   const minutes = Math.floor((countdown % 3600) / 60);
   const seconds = countdown % 60;
 
-  // Subscribe to deal alerts (mock)
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     setSubscribed(true);
@@ -57,36 +55,56 @@ export default function DealsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-yellow-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-primary">
+      <NavComponent />
+
       {/* Hero Banner */}
-      <section className="relative py-12 flex flex-col items-center justify-center text-center bg-gradient-to-r from-pink-500/90 to-yellow-400/90 mb-12 overflow-hidden">
+      <section className="relative py-12 flex flex-col items-center justify-center text-center bg-gradient-to-r from-orange-500/90 to-amber-500/90 mb-12 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/placeholder.svg')] bg-cover bg-center opacity-10 pointer-events-none" />
-        <h1 className="text-5xl md:text-6xl font-extrabold text-white drop-shadow mb-4 animate-fadeIn">Hot Deals & Flash Sales</h1>
+        <h1 className="text-5xl md:text-6xl font-extrabold text-white drop-shadow mb-4 animate-fadeIn">
+          Amazing Deals & Flash Sales
+        </h1>
         <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto mb-8 animate-fadeIn delay-100">
-          Save big with AI-powered bargains, exclusive flash sales, and personalized recommendations!
+          Save big with exclusive deals, flash sales, and personalized recommendations!
         </p>
         {dealOfTheDay && (
           <div className="bg-white/90 dark:bg-gray-900/80 rounded-xl shadow-lg px-8 py-6 flex flex-col md:flex-row items-center gap-6 animate-fadeInUp">
             <Image src={dealOfTheDay.image} alt={dealOfTheDay.name} width={120} height={120} className="rounded-lg object-cover" />
             <div className="flex-1 text-left">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-bold animate-pulse">Deal of the Day</Badge>
-                <span className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-200"><Clock className="w-4 h-4" /> {hours}h {minutes}m {seconds}s left</span>
+                <Badge className="bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold animate-pulse">
+                  Deal of the Day
+                </Badge>
+                <span className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-200">
+                  <Clock className="w-4 h-4" /> {hours}h {minutes}m {seconds}s left
+                </span>
               </div>
               <h2 className="text-2xl font-bold mb-1">{dealOfTheDay.name}</h2>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg font-bold text-pink-600 dark:text-pink-400">${dealOfTheDay.price.toFixed(2)}</span>
+                <span className="text-lg font-bold text-orange-600 dark:text-orange-400">
+                  ${dealOfTheDay.price.toFixed(2)}
+                </span>
                 {dealOfTheDay.originalPrice && (
-                  <span className="text-gray-500 line-through">${dealOfTheDay.originalPrice.toFixed(2)}</span>
+                  <span className="text-gray-500 line-through">
+                    ${dealOfTheDay.originalPrice.toFixed(2)}
+                  </span>
                 )}
                 {dealOfTheDay.originalPrice && (
-                  <Badge className="bg-yellow-400 text-white font-bold">-{getDiscountPercent(dealOfTheDay.originalPrice, dealOfTheDay.price)}%</Badge>
+                  <Badge className="bg-emerald-500 text-white font-bold">
+                    -{getDiscountPercent(dealOfTheDay.originalPrice, dealOfTheDay.price)}%
+                  </Badge>
                 )}
               </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">{dealOfTheDay.description}</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">
+                {dealOfTheDay.description}
+              </p>
               <div className="flex gap-2 mt-2">
-                <Button className="bg-pink-600 hover:bg-pink-700 text-white font-semibold"><ShoppingCart className="w-4 h-4 mr-1" /> Grab Now</Button>
-                <Button variant="outline" className="border-pink-500 text-pink-600 hover:bg-pink-50"><Heart className="w-4 h-4 mr-1" /> Wishlist</Button>
+                <Button className="btn-primary">
+                  <ShoppingCart className="w-4 h-4 mr-1" /> Grab Now
+                </Button>
+                <Button variant="outline" className="border-orange-500 text-orange-600 hover:bg-orange-50">
+                  <Heart className="w-4 h-4 mr-1" /> Wishlist
+                </Button>
               </div>
             </div>
           </div>
@@ -95,7 +113,7 @@ export default function DealsPage() {
 
       {/* Subscribe to Deal Alerts */}
       <section className="container mx-auto px-4 mb-8 flex flex-col items-center">
-        <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 items-center bg-white/80 dark:bg-gray-900/80 rounded-lg shadow p-4 w-full max-w-xl">
+        <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 items-center bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-soft p-4 w-full max-w-xl">
           <label className="font-semibold text-lg">Get Deal Alerts:</label>
           <input
             type="email"
@@ -103,33 +121,51 @@ export default function DealsPage() {
             placeholder="Your email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className="rounded border px-3 py-2 text-base flex-1"
+            className="rounded border px-3 py-2 text-base flex-1 input-enhanced"
           />
-          <Button type="submit" className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-2 rounded-lg">Subscribe</Button>
+          <Button type="submit" className="btn-primary px-6 py-2">
+            Subscribe
+          </Button>
         </form>
-        {subscribed && <div className="mt-2 text-green-600 font-semibold animate-fadeIn">Subscribed! You'll get the hottest deals in your inbox.</div>}
+        {subscribed && (
+          <div className="mt-2 text-emerald-600 font-semibold animate-fadeIn">
+            Subscribed! You'll get the hottest deals in your inbox.
+          </div>
+        )}
       </section>
 
       {/* Filters */}
       <section className="container mx-auto px-4 mb-8">
-        <div className="flex flex-wrap gap-4 items-center justify-between bg-white/80 dark:bg-gray-900/80 rounded-lg shadow p-4">
+        <div className="flex flex-wrap gap-4 items-center justify-between bg-white/80 dark:bg-gray-900/80 rounded-lg shadow-soft p-4">
           <div className="flex gap-2 items-center">
             <label className="font-semibold">Category:</label>
-            <select value={category} onChange={e => setCategory(e.target.value)} className="rounded border px-2 py-1">
+            <select 
+              value={category} 
+              onChange={e => setCategory(e.target.value)} 
+              className="rounded border px-2 py-1 input-enhanced"
+            >
               <option value="all">All</option>
               {categories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
           <div className="flex gap-2 items-center">
             <label className="font-semibold">Brand:</label>
-            <select value={brand} onChange={e => setBrand(e.target.value)} className="rounded border px-2 py-1">
+            <select 
+              value={brand} 
+              onChange={e => setBrand(e.target.value)} 
+              className="rounded border px-2 py-1 input-enhanced"
+            >
               <option value="all">All</option>
               {brands.map(b => <option key={b} value={b}>{b}</option>)}
             </select>
           </div>
           <div className="flex gap-2 items-center">
             <label className="font-semibold">Sort by:</label>
-            <select value={sort} onChange={e => setSort(e.target.value)} className="rounded border px-2 py-1">
+            <select 
+              value={sort} 
+              onChange={e => setSort(e.target.value)} 
+              className="rounded border px-2 py-1 input-enhanced"
+            >
               <option value="discount">Biggest Discount</option>
               <option value="low">Price: Low to High</option>
               <option value="high">Price: High to Low</option>
@@ -140,43 +176,68 @@ export default function DealsPage() {
 
       {/* Deals Grid */}
       <section className="container mx-auto px-4 pb-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {filteredDeals.length === 0 && (
-            <div className="col-span-full text-center text-gray-500 text-lg py-12">No deals found.</div>
+            <div className="col-span-full text-center text-gray-500 text-lg py-12">
+              <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-gray-400" />
+              </div>
+              <p>No deals found matching your criteria.</p>
+            </div>
           )}
           {filteredDeals.map((product, idx) => (
-            <Card key={product.id} className="group border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 bg-white/90 dark:bg-gray-900/80 relative overflow-hidden animate-fadeInUp" style={{ animationDelay: `${idx * 60}ms` }}>
+            <Card key={product.id} className="group border-0 shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-2 bg-white dark:bg-gray-900 relative overflow-hidden">
               <CardContent className="p-6 flex flex-col items-center">
                 <div className="relative w-32 h-32 mb-4">
                   <Image src={product.image} alt={product.name} fill className="object-cover rounded-lg" />
                   {product.isFeatured && (
-                    <Badge className="absolute top-2 left-2 bg-blue-600 text-white font-bold animate-pulse">AI Bargain</Badge>
+                    <Badge className="absolute top-2 left-2 bg-orange-600 text-white font-bold animate-pulse">
+                      Special Deal
+                    </Badge>
                   )}
                   {product.originalPrice && (
-                    <Badge className="absolute top-2 right-2 bg-yellow-400 text-white font-bold">-{getDiscountPercent(product.originalPrice, product.price)}%</Badge>
+                    <Badge className="absolute top-2 right-2 bg-emerald-500 text-white font-bold">
+                      -{getDiscountPercent(product.originalPrice, product.price)}%
+                    </Badge>
                   )}
                   {idx < 3 && (
-                    <Badge className="absolute bottom-2 left-2 bg-pink-600 text-white font-bold animate-pulse">Expiring Soon</Badge>
+                    <Badge className="absolute bottom-2 left-2 bg-orange-600 text-white font-bold animate-pulse">
+                      Expiring Soon
+                    </Badge>
                   )}
                   {product.inStock && product.inStock < 10 && (
-                    <Badge className="absolute bottom-2 right-2 bg-red-600 text-white font-bold animate-bounce">Limited Stock</Badge>
+                    <Badge className="absolute bottom-2 right-2 bg-red-600 text-white font-bold animate-bounce">
+                      Limited Stock
+                    </Badge>
                   )}
                 </div>
-                <h3 className="text-lg font-bold mb-1 text-center group-hover:text-pink-600 transition-colors">{product.name}</h3>
+                <h3 className="text-lg font-bold mb-1 text-center group-hover:text-orange-600 transition-colors">
+                  {product.name}
+                </h3>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-pink-600 font-bold text-lg">${product.price.toFixed(2)}</span>
+                  <span className="text-orange-600 font-bold text-lg">
+                    ${product.price.toFixed(2)}
+                  </span>
                   {product.originalPrice && (
-                    <span className="text-gray-500 line-through">${product.originalPrice.toFixed(2)}</span>
+                    <span className="text-gray-500 line-through">
+                      ${product.originalPrice.toFixed(2)}
+                    </span>
                   )}
                 </div>
                 <div className="flex items-center gap-1 mb-2">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
                   <span className="text-sm font-medium">{product.rating}</span>
                 </div>
-                <p className="text-gray-500 dark:text-gray-300 mb-2 text-center line-clamp-2">{product.description}</p>
+                <p className="text-gray-500 dark:text-gray-300 mb-2 text-center line-clamp-2">
+                  {product.description}
+                </p>
                 <div className="flex gap-2 mt-auto">
-                  <Button className="bg-pink-600 hover:bg-pink-700 text-white font-semibold"><ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart</Button>
-                  <Button variant="outline" className="border-pink-500 text-pink-600 hover:bg-pink-50"><Heart className="w-4 h-4 mr-1" /> Wishlist</Button>
+                  <Button className="btn-primary">
+                    <ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart
+                  </Button>
+                  <Button variant="outline" className="border-orange-500 text-orange-600 hover:bg-orange-50">
+                    <Heart className="w-4 h-4 mr-1" /> Wishlist
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -184,28 +245,43 @@ export default function DealsPage() {
         </div>
       </section>
 
-      {/* AI-Powered Personalized Deals */}
+      {/* Personalized Deals */}
       <section className="container mx-auto px-4 pb-16">
-        <h2 className="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2"><Sparkles className="w-6 h-6 text-pink-500" /> Deals Just for You</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-          {aiRecommendedDeals.map((product, idx) => (
-            <Card key={product.id} className="group border-0 shadow hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-white/90 dark:bg-gray-900/80 relative overflow-hidden animate-fadeInUp" style={{ animationDelay: `${idx * 60}ms` }}>
+        <h2 className="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2">
+          <Sparkles className="w-6 h-6 text-orange-500" /> Deals Just for You
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {recommendedDeals.map((product, idx) => (
+            <Card key={product.id} className="group border-0 shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-white dark:bg-gray-900 relative overflow-hidden">
               <CardContent className="p-6 flex flex-col items-center">
                 <div className="relative w-28 h-28 mb-3">
                   <Image src={product.image} alt={product.name} fill className="object-cover rounded-lg" />
                 </div>
-                <h3 className="text-base font-bold mb-1 text-center group-hover:text-pink-600 transition-colors">{product.name}</h3>
+                <h3 className="text-base font-bold mb-1 text-center group-hover:text-orange-600 transition-colors">
+                  {product.name}
+                </h3>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-pink-600 font-bold text-base">${product.price.toFixed(2)}</span>
+                  <span className="text-orange-600 font-bold text-base">
+                    ${product.price.toFixed(2)}
+                  </span>
                   {product.originalPrice && (
-                    <span className="text-gray-500 line-through">${product.originalPrice.toFixed(2)}</span>
+                    <span className="text-gray-500 line-through text-sm">
+                      ${product.originalPrice.toFixed(2)}
+                    </span>
                   )}
                 </div>
                 <div className="flex items-center gap-1 mb-2">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
                   <span className="text-sm font-medium">{product.rating}</span>
                 </div>
-                <Button className="bg-pink-600 hover:bg-pink-700 text-white font-semibold w-full mt-auto"><ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart</Button>
+                <div className="flex gap-2 mt-auto">
+                  <Button size="sm" className="btn-primary">
+                    <ShoppingCart className="w-4 h-4 mr-1" /> Add to Cart
+                  </Button>
+                  <Button size="sm" variant="outline" className="border-orange-500 text-orange-600 hover:bg-orange-50">
+                    <Heart className="w-4 h-4 mr-1" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}

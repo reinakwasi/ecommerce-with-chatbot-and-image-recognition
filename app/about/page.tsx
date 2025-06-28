@@ -1,6 +1,12 @@
 "use client";
 import Image from "next/image";
 import { Sparkles, Bot, Search, Zap, Users, TrendingUp, ShoppingCart, Shield, Star } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Navigation } from "@/components/navigation"
+import { ArrowRight, ShoppingBag, Heart, Truck, Gift } from "lucide-react"
+import Link from "next/link"
 
 const team = [
   { name: "Alex Kim", role: "Founder & CEO", img: "/placeholder-user.jpg" },
@@ -9,14 +15,57 @@ const team = [
   { name: "James Lee", role: "Full Stack Developer", img: "/placeholder-user.jpg" },
 ];
 
+const stats = [
+  { label: "Happy Customers", value: "50K+", icon: Users },
+  { label: "Products Available", value: "100K+", icon: ShoppingBag },
+  { label: "Customer Satisfaction", value: "99.9%", icon: TrendingUp },
+]
+
+const values = [
+  {
+    icon: Heart,
+    title: "Customer First",
+    description: "We put our customers at the heart of everything we do, ensuring you have the best shopping experience possible."
+  },
+  {
+    icon: Shield,
+    title: "Trust & Security",
+    description: "Your security is our priority. We use industry-leading protection to keep your information safe."
+  },
+  {
+    icon: Truck,
+    title: "Fast & Reliable",
+    description: "Quick delivery and reliable service. We get your products to you when you need them."
+  },
+  {
+    icon: Gift,
+    title: "Great Deals",
+    description: "We work hard to bring you the best prices and exclusive offers on quality products."
+  }
+]
+
 const features = [
-  { icon: <Bot className="w-8 h-8 text-blue-600" />, title: "Personal Shopping Assistant", desc: "Our smart assistant helps you find what you love, just for you." },
-  { icon: <Search className="w-8 h-8 text-purple-600" />, title: "Easy Search", desc: "Look for products by typing or uploading a photo—it's that simple!" },
-  { icon: <Zap className="w-8 h-8 text-yellow-500" />, title: "Big Savings & Special Offers", desc: "Enjoy daily deals, special discounts, and surprise price drops." },
-  { icon: <Shield className="w-8 h-8 text-green-600" />, title: "Safe & Secure Shopping", desc: "Your information is always protected and private with us." },
-  { icon: <ShoppingCart className="w-8 h-8 text-pink-600" />, title: "Smooth Shopping Experience", desc: "Shop easily, pay quickly, and get your order fast." },
-  { icon: <Star className="w-8 h-8 text-yellow-400" />, title: "Friendly Support", desc: "Our team is here to help you anytime you need it." },
-];
+  {
+    icon: Zap,
+    title: "Smart Search",
+    description: "Find exactly what you're looking for with our intelligent search that understands what you want."
+  },
+  {
+    icon: Heart,
+    title: "Personalized Recommendations",
+    description: "Get product suggestions tailored just for you based on your preferences and shopping history."
+  },
+  {
+    icon: Users,
+    title: "Friendly Assistance",
+    description: "Our helpful shopping assistant is here to help you find the best deals and answer your questions."
+  },
+  {
+    icon: Star,
+    title: "Quality Guarantee",
+    description: "Every product is carefully selected and quality-checked to ensure you get the best value."
+  }
+]
 
 const timeline = [
   { year: "2022", event: "We dreamed of making online shopping easier and more fun for everyone." },
@@ -26,15 +75,15 @@ const timeline = [
 ];
 
 const faqs = [
-  { q: "What makes AI Commerce different?", a: "We help you find the best products and deals, just for you. Our smart assistant makes shopping easy and fun!" },
+  { q: "What makes SmartShop different?", a: "We help you find the best products and deals, just for you. Our smart features make shopping easy and fun!" },
   { q: "Is my information safe?", a: "Yes! We keep your details private and never share them with anyone else." },
   { q: "How do I get a better price?", a: "Look out for our special offers and daily deals. You can also chat with our assistant for tips!" },
   { q: "How can I get help?", a: "You can contact us anytime through our website or live chat. We're always happy to help!" },
 ];
 
 const testimonials = [
-  { name: "Sarah Johnson", quote: "AI Commerce found me the perfect phone at a great price! The AI negotiation was so easy.", img: "/placeholder-user.jpg" },
-  { name: "David Kim", quote: "I love the smart search and flash deals. Shopping here feels futuristic!", img: "/placeholder-user.jpg" },
+  { name: "Sarah Johnson", quote: "SmartShop found me the perfect phone at a great price! The negotiation feature was so easy.", img: "/placeholder-user.jpg" },
+  { name: "David Kim", quote: "I love the smart search and flash deals. Shopping here feels effortless!", img: "/placeholder-user.jpg" },
   { name: "Emily Chen", quote: "Customer support was super helpful and the delivery was fast. Highly recommend!", img: "/placeholder-user.jpg" },
 ];
 
@@ -48,106 +97,227 @@ const partners = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-primary">
+      <Navigation />
+
       {/* Hero Section */}
-      <section className="py-20 text-center">
-        <div className="flex flex-col items-center justify-center mb-8">
-          <Image src="/placeholder-logo.png" alt="AI Commerce Logo" width={80} height={80} className="mb-4" />
-          <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 animate-fadeIn">About AI Commerce</h1>
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto animate-fadeIn delay-100">
-            Revolutionizing online shopping with artificial intelligence, personalized experiences, and unbeatable deals.
+      <section className="py-20 bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 dark:from-orange-950 dark:via-amber-950 dark:to-yellow-950">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-6">
+            About SmartShop
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
+            We're on a mission to make shopping simple, fun, and rewarding. 
+            Our smart platform helps you discover amazing products and get the best deals.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/products">
+              <Button size="lg" className="btn-primary">
+                Start Shopping
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+            <Link href="/contact">
+              <Button variant="outline" size="lg">
+                Contact Us
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">What Makes Us Unique?</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {features.map((f, i) => (
-            <div key={f.title} className="bg-white/80 dark:bg-gray-900/80 rounded-xl shadow p-6 flex flex-col items-center text-center animate-fadeInUp" style={{ animationDelay: `${i * 80}ms` }}>
-              <div className="mb-4">{f.icon}</div>
-              <h3 className="text-xl font-semibold mb-2">{f.title}</h3>
-              <p className="text-gray-600 dark:text-gray-300">{f.desc}</p>
-            </div>
-          ))}
+      {/* Stats Section */}
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center">
+                    <stat.icon className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+                <div className="text-3xl font-bold mb-2 gradient-text">{stat.value}</div>
+                <div className="text-gray-600 dark:text-gray-300">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">Our Story</h2>
-        <div className="flex flex-col md:flex-row md:justify-center md:gap-12">
-          {timeline.map((t, i) => (
-            <div key={t.year} className="flex flex-col items-center mb-8 md:mb-0 animate-fadeInUp" style={{ animationDelay: `${i * 100}ms` }}>
-              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-bold mb-2">{t.year}</div>
-              <p className="text-gray-700 dark:text-gray-200 text-center max-w-xs">{t.event}</p>
-            </div>
-          ))}
+      {/* Our Story */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-6">Our Story</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+              SmartShop was born from a simple idea: shopping should be easy, enjoyable, and rewarding. 
+              We believe everyone deserves to find great products at great prices without the hassle.
+            </p>
+            <p className="text-lg text-gray-600 dark:text-gray-300">
+              Today, we're proud to serve thousands of happy customers with our smart shopping platform 
+              that combines technology with human touch to create the best shopping experience possible.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">Meet the Team</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-          {team.map((member, i) => (
-            <div key={member.name} className="flex flex-col items-center bg-white/80 dark:bg-gray-900/80 rounded-xl shadow p-6 animate-fadeInUp" style={{ animationDelay: `${i * 80}ms` }}>
-              <Image src={member.img} alt={member.name} width={80} height={80} className="rounded-full mb-3" />
-              <h3 className="text-lg font-semibold mb-1">{member.name}</h3>
-              <p className="text-gray-500 dark:text-gray-300">{member.role}</p>
-            </div>
-          ))}
+      {/* Our Values */}
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Our Values</h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              These principles guide everything we do
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value, index) => (
+              <Card key={index} className="border-0 shadow-soft text-center">
+                <CardContent className="p-6">
+                  <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <value.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-semibold mb-2">{value.title}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">{value.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-16 text-center">
-        <h2 className="text-3xl font-bold mb-4">Ready to Experience the Future of Shopping?</h2>
-        <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">Start exploring our AI-powered platform or get in touch with our team!</p>
-        <div className="flex flex-col md:flex-row gap-4 justify-center">
-          <a href="/products" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-lg shadow-lg transition-transform hover:scale-105">Start Shopping</a>
-          <a href="/contact" className="bg-white dark:bg-gray-900 border border-blue-600 text-blue-600 font-bold px-8 py-3 rounded-lg shadow-lg transition-transform hover:scale-105">Contact Us</a>
+      {/* Features */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">What Makes Us Special</h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              Smart features that make shopping better
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {features.map((feature, index) => (
+              <Card key={index} className="border-0 shadow-soft">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                      <feature.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">{feature.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {faqs.map((faq, i) => (
-            <div key={faq.q} className="bg-white/80 dark:bg-gray-900/80 rounded-xl shadow p-6 animate-fadeInUp" style={{ animationDelay: `${i * 80}ms` }}>
-              <h3 className="text-lg font-semibold mb-2">{faq.q}</h3>
-              <p className="text-gray-600 dark:text-gray-300">{faq.a}</p>
-            </div>
-          ))}
+      {/* Testimonials */}
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">What Our Customers Say</h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              Real stories from real customers
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="border-0 shadow-soft">
+                <CardContent className="p-6">
+                  <div className="flex items-center mb-4">
+                    <img
+                      src={testimonial.img}
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full mr-4"
+                    />
+                    <div>
+                      <h4 className="font-semibold">{testimonial.name}</h4>
+                      <div className="flex text-yellow-400">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-current" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300 italic">
+                    "{testimonial.quote}"
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">What Our Customers Say</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((t, i) => (
-            <div key={t.name} className="flex flex-col items-center bg-white/80 dark:bg-gray-900/80 rounded-xl shadow p-6 animate-fadeInUp" style={{ animationDelay: `${i * 80}ms` }}>
-              <Image src={t.img} alt={t.name} width={60} height={60} className="rounded-full mb-3" />
-              <p className="italic text-gray-700 dark:text-gray-200 mb-2">"{t.quote}"</p>
-              <h4 className="font-semibold text-blue-600">{t.name}</h4>
-            </div>
-          ))}
+      {/* FAQ */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              Everything you need to know about SmartShop
+            </p>
+          </div>
+          
+          <div className="max-w-3xl mx-auto space-y-6">
+            {faqs.map((faq, index) => (
+              <Card key={index} className="border-0 shadow-soft">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold mb-2">{faq.q}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{faq.a}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Partners Section */}
-      <section className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8 text-center">Our Partners</h2>
-        <div className="flex flex-wrap justify-center items-center gap-8">
-          {partners.map((p, i) => (
-            <div key={p.name} className="flex flex-col items-center animate-fadeInUp" style={{ animationDelay: `${i * 80}ms` }}>
-              <Image src={p.logo} alt={p.name} width={80} height={80} className="mb-2" />
-              <span className="text-gray-500 dark:text-gray-300 text-sm">{p.name}</span>
-            </div>
-          ))}
+      {/* Partners */}
+      <section className="py-16 bg-white dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Our Partners</h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              Trusted brands we work with
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 items-center">
+            {partners.map((partner, index) => (
+              <div key={index} className="text-center">
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="h-12 mx-auto opacity-60 hover:opacity-100 transition-opacity"
+                />
+                <p className="text-sm text-gray-500 mt-2">{partner.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 bg-gradient-to-br from-orange-500 to-amber-500">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">Ready to Start Shopping?</h2>
+          <p className="text-white/90 mb-8 max-w-2xl mx-auto">
+            Join thousands of happy customers who love our smart shopping experience
+          </p>
+          <Link href="/products">
+            <Button size="lg" className="bg-white text-orange-600 hover:bg-gray-100">
+              Start Shopping Now
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </Link>
         </div>
       </section>
 

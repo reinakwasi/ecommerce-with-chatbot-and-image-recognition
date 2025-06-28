@@ -21,54 +21,54 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    default: "AI Commerce - Next-Gen Shopping Experience",
-    template: "%s | AI Commerce"
+    default: "SmartShop - Smart Shopping Made Simple",
+    template: "%s | SmartShop"
   },
-  description: "Revolutionary e-commerce platform with AI-powered search, bargaining, and personalized recommendations. Experience the future of shopping.",
+  description: "Discover amazing products with smart search, personalized recommendations, and friendly price negotiation. Shopping has never been this easy!",
   keywords: [
     "e-commerce",
-    "AI shopping",
-    "artificial intelligence",
     "online shopping",
     "smart search",
-    "AI bargaining",
     "product recommendations",
-    "visual search"
+    "visual search",
+    "price negotiation",
+    "shopping platform",
+    "retail"
   ],
-  authors: [{ name: "AI Commerce Team" }],
-  creator: "AI Commerce",
-  publisher: "AI Commerce",
+  authors: [{ name: "SmartShop Team" }],
+  creator: "SmartShop",
+  publisher: "SmartShop",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://ai-commerce.com"),
+  metadataBase: new URL("https://smartshop.com"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://ai-commerce.com",
-    title: "AI Commerce - Next-Gen Shopping Experience",
-    description: "Revolutionary e-commerce platform with AI-powered search, bargaining, and personalized recommendations.",
-    siteName: "AI Commerce",
+    url: "https://smartshop.com",
+    title: "SmartShop - Smart Shopping Made Simple",
+    description: "Discover amazing products with smart search, personalized recommendations, and friendly price negotiation.",
+    siteName: "SmartShop",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "AI Commerce - Next-Gen Shopping Experience",
+        alt: "SmartShop - Smart Shopping Made Simple",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Commerce - Next-Gen Shopping Experience",
-    description: "Revolutionary e-commerce platform with AI-powered search, bargaining, and personalized recommendations.",
+    title: "SmartShop - Smart Shopping Made Simple",
+    description: "Discover amazing products with smart search, personalized recommendations, and friendly price negotiation.",
     images: ["/og-image.jpg"],
-    creator: "@aicommerce",
+    creator: "@smartshop",
   },
   robots: {
     index: true,
@@ -108,7 +108,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#3b82f6" />
+        <meta name="theme-color" content="#f97316" />
       </head>
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider 
