@@ -1,109 +1,24 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { 
   Search, Sparkles, ShoppingBag, Users, TrendingUp, ArrowRight, 
   Star, Heart, ShoppingCart, Zap, Shield, Truck, Gift, Clock,
-  Crown, Target, Award, Lightning,
-  MessageCircle, Eye, Share2, Bell, Grid, List, Fire, Rocket,
-  Globe, Lock, Wifi, Battery, Signal, CheckCircle, Package,
-  CreditCard, MapPin, Calendar, Timer, Gift as GiftIcon
+  Camera, Crown, Target, Award, Lightning,
+  MessageCircle, Eye, Share2, Bell, Grid, List, Fire, Rocket
 } from "lucide-react"
 import Link from "next/link"
-import { SmartSearchBar } from "@/components/smart-search-bar"
-import { ProductGrid } from "@/components/product-grid"
 import { Navigation } from "@/components/navigation"
-import { ProductRecommendations } from "@/components/product-recommendations"
-import { getUniqueProductsBySection } from "@/lib/products"
-import { products, categories as productCategories } from "@/lib/products"
 
 export default function HomePage() {
   const [userPoints, setUserPoints] = useState(1250)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  // 3D Background Animation
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
-    const particles = []
-    const particleCount = 100
-
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 3 + 1,
-        opacity: Math.random() * 0.5 + 0.1
-      })
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      
-      particles.forEach(particle => {
-        particle.x += particle.vx
-        particle.y += particle.vy
-        
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
-        
-        ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 165, 0, ${particle.opacity})`
-        ctx.fill()
-      })
-      
-      requestAnimationFrame(animate)
-    }
-    
-    animate()
-  }, [])
-
-  const featuredProducts = getUniqueProductsBySection('featured', new Set(), 8)
-  const newArrivals = getUniqueProductsBySection('new', new Set(), 8)
-
-  const categoryIcons: Record<string, string> = {
-    Smartphones: "📱",
-    Laptops: "💻",
-    Audio: "🎧",
-    Tablets: "📲",
-    Wearables: "⌚",
-    Gaming: "🎮",
-    TVs: "📺",
-    "Smart Home": "🏠",
-    Cameras: "📷",
-    Drones: "🚁",
-  }
-
-  const categoriesWithCounts = productCategories
-    .map((category) => ({
-      name: category,
-      icon: categoryIcons[category] || "📦",
-      count: products.filter((p) => p.category === category).length,
-    }))
-    .filter((c) => c.count > 0)
+  const [showAR, setShowAR] = useState(false)
 
   return (
     <div className="min-h-screen bg-gradient-primary relative overflow-hidden">
-      {/* Animated Background */}
-      <canvas 
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none opacity-20"
-        style={{ zIndex: 0 }}
-      />
-
       {/* Navigation */}
       <Navigation />
 
@@ -131,7 +46,7 @@ export default function HomePage() {
             
             <p className="text-2xl md:text-3xl text-white/90 max-w-4xl mx-auto mb-8 animate-fadeIn delay-100">
               Experience the future of shopping with AI-powered recommendations, 
-              smart search, and interactive product discovery!
+              AR try-ons, and interactive product discovery!
             </p>
 
             {/* Gamification Header */}
@@ -145,24 +60,20 @@ export default function HomePage() {
                 Level 5 Shopper
               </Badge>
             </div>
-            
-            {/* Smart Search Bar */}
-            <div className="mb-12 animate-fadeIn delay-300">
-              <SmartSearchBar />
-            </div>
 
             {/* Interactive Features */}
             <div className="flex justify-center gap-4 mb-8 animate-fadeIn delay-400">
+              <Button 
+                onClick={() => setShowAR(!showAR)}
+                className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border border-white/30"
+              >
+                <Camera className="w-4 h-4 mr-2" />
+                AR Try-On
+              </Button>
               <Link href="/products">
                 <Button className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border border-white/30">
                   <ShoppingBag className="w-4 h-4 mr-2" />
                   Start Shopping
-                </Button>
-              </Link>
-              <Link href="/categories">
-                <Button className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border border-white/30">
-                  <Grid className="w-4 h-4 mr-2" />
-                  Browse Categories
                 </Button>
               </Link>
             </div>
@@ -238,64 +149,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Products */}
-      <section className="py-16 bg-white dark:bg-gray-900 relative" style={{ zIndex: 1 }}>
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-4xl font-bold mb-2">Featured Products</h2>
-              <p className="text-gray-600 dark:text-gray-300">
-                Handpicked items our customers love
-              </p>
+      {/* AR Try-On Overlay */}
+      {showAR && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold">AR Try-On</h3>
+              <button onClick={() => setShowAR(false)} className="text-gray-500 hover:text-gray-700">
+                ×
+              </button>
             </div>
-            <Link href="/products">
-              <Button variant="outline" className="group">
-                View All
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-          </div>
-          
-          <ProductGrid products={featuredProducts} limit={8} showFilters={false} />
-        </div>
-      </section>
-
-      {/* Interactive Categories */}
-      <section id="categories" className="py-16 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 relative" style={{ zIndex: 1 }}>
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Explore Categories</h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              Discover our wide range of product categories
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-            {categoriesWithCounts.map((category, idx) => (
-              <Link key={category.name} href={`/products?category=${category.name}`}>
-                <Card className="group cursor-pointer border-0 shadow-soft hover:shadow-2xl transition-all duration-500 hover:-translate-y-4 bg-white/80 backdrop-blur-sm hover:bg-white">
-                  <CardContent className="p-6 text-center relative overflow-hidden">
-                    <div className="text-5xl mb-4 group-hover:scale-125 transition-transform duration-500">
-                      {category.icon}
-                    </div>
-                    <h3 className="font-bold mb-2 group-hover:text-orange-600 transition-colors text-lg">
-                      {category.name}
-                    </h3>
-                    <p className="text-sm text-gray-500">{category.count} products</p>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+            <div className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+              <div className="text-center">
+                <Camera className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                <p className="text-gray-600">Point camera at yourself</p>
+                <p className="text-sm text-gray-500">Try on products virtually</p>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* Smart Recommendations */}
-      <section className="py-16 bg-white dark:bg-gray-900 relative" style={{ zIndex: 1 }}>
-        <div className="container mx-auto px-4">
-          <ProductRecommendations showPersonalized={true} showTrending={true} showRecentlyViewed={true} />
-        </div>
-      </section>
+      )}
 
       <style jsx global>{`
         @keyframes fadeIn {
