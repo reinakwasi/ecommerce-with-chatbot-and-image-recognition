@@ -25,6 +25,7 @@ interface ProductGridProps {
   viewMode?: "grid" | "list" | "3d"
   onQuickView?: (product: Product) => void
   livePrices?: Record<string, number>
+  priceRange?: string
 }
 
 export function ProductGrid({ 
@@ -36,40 +37,26 @@ export function ProductGrid({
   limit,
   viewMode = "grid",
   onQuickView,
-  livePrices = {}
-}: ProductGridProps) {
+  livePrices = {},
+  priceRange,
+}: ProductGridProps & { priceRange?: string }) {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [selectedCategory, setSelectedCategory] = useState(category || "all")
   const [selectedBrand, setSelectedBrand] = useState(brand || "all")
   const [sortBy, setSortBy] = useState("featured")
-  const [priceRange, setPriceRange] = useState("all")
   const [searchTerm, setSearchTerm] = useState(searchQuery || "")
   const { toast } = useToast()
 
   useEffect(() => {
     let filtered = [...(productsProp || products)]
 
-    // Apply search filter - make it more robust
+    // Refined search: only match name or brand
     if (searchTerm && searchTerm.trim()) {
       const lowercaseQuery = searchTerm.toLowerCase().trim()
-      console.log('Searching for:', lowercaseQuery) // Debug log
-      
-      filtered = filtered.filter(product => {
-        const nameMatch = product.name.toLowerCase().includes(lowercaseQuery)
-        const descriptionMatch = product.description.toLowerCase().includes(lowercaseQuery)
-        const brandMatch = product.brand.toLowerCase().includes(lowercaseQuery)
-        const categoryMatch = product.category.toLowerCase().includes(lowercaseQuery)
-        const tagsMatch = product.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery))
-        
-        // Also search for partial matches (e.g., "iphone" should match "iPhone 15 Pro Max")
-        const partialNameMatch = product.name.toLowerCase().split(' ').some(word => 
-          word.includes(lowercaseQuery) || lowercaseQuery.includes(word)
-        )
-        
-        return nameMatch || descriptionMatch || brandMatch || categoryMatch || tagsMatch || partialNameMatch
-      })
-      
-      console.log('Found products:', filtered.length) // Debug log
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(lowercaseQuery) ||
+        product.brand.toLowerCase().includes(lowercaseQuery)
+      )
     }
 
     // Apply category filter

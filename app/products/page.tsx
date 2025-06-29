@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast"
 import { ProductGrid } from "@/components/product-grid"
 import { Navigation } from "@/components/navigation"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { categories, brands } from "@/lib/products"
+import { products } from "@/lib/products"
 
 interface Product {
   id: string
@@ -33,6 +33,10 @@ interface Product {
   inStock: boolean
   description?: string
 }
+
+// Dynamically get all unique brands from products
+const allBrands = Array.from(new Set(products.map(p => p.brand))).sort()
+const categories = Array.from(new Set(products.map(p => p.category))).sort()
 
 export default function ProductsPage() {
   const searchParams = useSearchParams()
@@ -55,7 +59,6 @@ export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [selectedBrand, setSelectedBrand] = useState<string>("all")
   const [selectedPrice, setSelectedPrice] = useState<string>("all")
-  const [selectedRating, setSelectedRating] = useState<number>(0)
 
   // 3D Background Animation
   useEffect(() => {
@@ -222,6 +225,7 @@ export default function ProductsPage() {
     viewMode,
     onQuickView: handleVirtualTryOn,
     livePrices,
+    priceRange: selectedPrice,
   }
 
   // Filter UI
@@ -244,7 +248,7 @@ export default function ProductsPage() {
           <h4 className="font-semibold mb-2 text-orange-500">Brand</h4>
           <div className="flex flex-col gap-2">
             <Button variant={selectedBrand === "all" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedBrand("all")}>All</Button>
-            {brands.map(brand => (
+            {allBrands.map(brand => (
               <Button key={brand} variant={selectedBrand === brand ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedBrand(brand)}>{brand}</Button>
             ))}
           </div>
@@ -260,22 +264,9 @@ export default function ProductsPage() {
             <Button variant={selectedPrice === "over-1000" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("over-1000")}>Over $1000</Button>
           </div>
         </div>
-        {/* Rating */}
-        <div className="mb-6">
-          <h4 className="font-semibold mb-2 text-orange-500">Rating</h4>
-          <div className="flex gap-2 flex-wrap">
-            {[5,4,3,2,1].map(star => (
-              <Button key={star} variant={selectedRating === star ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedRating(star)}>
-                {[...Array(star)].map((_,i) => <Star key={i} className="w-4 h-4 text-yellow-400 inline" />)}
-                {star}+
-              </Button>
-            ))}
-            <Button variant={selectedRating === 0 ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedRating(0)}>All</Button>
-          </div>
-        </div>
         {/* Reset */}
         <Button variant="outline" className="w-full mt-2" onClick={() => {
-          setSelectedCategory("all"); setSelectedBrand("all"); setSelectedPrice("all"); setSelectedRating(0);
+          setSelectedCategory("all"); setSelectedBrand("all"); setSelectedPrice("all");
         }}>Reset Filters</Button>
       </div>
     </aside>
@@ -306,7 +297,7 @@ export default function ProductsPage() {
           <h4 className="font-semibold mb-2 text-orange-500">Brand</h4>
           <div className="flex flex-col gap-2">
             <Button variant={selectedBrand === "all" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedBrand("all")}>All</Button>
-            {brands.map(brand => (
+            {allBrands.map(brand => (
               <Button key={brand} variant={selectedBrand === brand ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedBrand(brand)}>{brand}</Button>
             ))}
           </div>
@@ -322,22 +313,9 @@ export default function ProductsPage() {
             <Button variant={selectedPrice === "over-1000" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("over-1000")}>Over $1000</Button>
           </div>
         </div>
-        {/* Rating */}
-        <div className="mb-6">
-          <h4 className="font-semibold mb-2 text-orange-500">Rating</h4>
-          <div className="flex gap-2 flex-wrap">
-            {[5,4,3,2,1].map(star => (
-              <Button key={star} variant={selectedRating === star ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedRating(star)}>
-                {[...Array(star)].map((_,i) => <Star key={i} className="w-4 h-4 text-yellow-400 inline" />)}
-                {star}+
-              </Button>
-            ))}
-            <Button variant={selectedRating === 0 ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedRating(0)}>All</Button>
-          </div>
-        </div>
         {/* Reset */}
         <Button variant="outline" className="w-full mt-2" onClick={() => {
-          setSelectedCategory("all"); setSelectedBrand("all"); setSelectedPrice("all"); setSelectedRating(0);
+          setSelectedCategory("all"); setSelectedBrand("all"); setSelectedPrice("all");
         }}>Reset Filters</Button>
       </SheetContent>
     </Sheet>
@@ -592,8 +570,6 @@ export default function ProductsPage() {
         <div className="flex-1">
           <ProductGrid 
             {...productGridProps}
-            priceRange={selectedPrice}
-            minRating={selectedRating}
           />
         </div>
         {FilterDrawer}
