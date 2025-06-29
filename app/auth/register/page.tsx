@@ -67,20 +67,6 @@ export default function RegisterPage() {
         { name: "businessName", label: "Business Name", type: "text", placeholder: "Enter your business name" },
         { name: "contactPerson", label: "Contact Person", type: "text", placeholder: "Enter contact person name" },
         { name: "email", label: "Business Email", type: "email", placeholder: "Enter business email" },
-        { name: "taxId", label: "Tax ID", type: "text", placeholder: "Enter your tax ID" },
-        { name: "password", label: "Password", type: "password", placeholder: "Create a strong password" }
-      ]
-    },
-    {
-      id: "admin",
-      title: "Admin",
-      icon: Shield,
-      color: "from-teal-500 to-emerald-500",
-      description: "Platform management and user support",
-      fields: [
-        { name: "fullName", label: "Full Name", type: "text", placeholder: "Enter your full name" },
-        { name: "email", label: "Email Address", type: "email", placeholder: "Enter your email" },
-        { name: "adminCode", label: "Admin Code", type: "text", placeholder: "Enter admin access code" },
         { name: "password", label: "Password", type: "password", placeholder: "Create a strong password" }
       ]
     }
