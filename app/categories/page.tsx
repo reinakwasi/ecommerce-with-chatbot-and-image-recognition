@@ -182,10 +182,6 @@ export default function CategoriesPage() {
           <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full animate-ping"></div>
         </h1>
         
-        <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto mb-8 animate-fadeIn delay-100">
-          Find your perfect style, tech, and more—discover our curated collections for everyone!
-        </p>
-        
         {/* Interactive Search with Voice */}
         <div className="flex justify-center animate-fadeIn delay-200 relative">
           <div className="relative group">
@@ -197,12 +193,6 @@ export default function CategoriesPage() {
               onChange={e => setSearch(e.target.value)}
               className="pl-10 pr-20 py-3 rounded-lg border-2 border-white/20 focus:ring-2 focus:ring-white/50 focus:outline-none w-72 md:w-96 text-lg shadow-lg bg-white/10 backdrop-blur-sm text-white placeholder-white/70"
             />
-            <button 
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors"
-              onClick={() => setIsMuted(!isMuted)}
-            >
-              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-            </button>
           </div>
         </div>
 

@@ -16,7 +16,7 @@ type Props = {
 export default function CategoryCard({ category, onPreview }: Props) {
   return (
     <div className="relative group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow bg-white dark:bg-gray-900 cursor-pointer">
-      <Link href={`/categories/${category.slug}`} className="block w-full h-48">
+      <Link href={`/products?category=${encodeURIComponent(category.name)}`} className="block w-full h-48">
         <Image
           src={category.image}
           alt={category.name}

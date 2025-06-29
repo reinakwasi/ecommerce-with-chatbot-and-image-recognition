@@ -41,8 +41,8 @@ const categories = Array.from(new Set(products.map(p => p.category))).sort()
 export default function ProductsPage() {
   const searchParams = useSearchParams()
   const searchQuery = searchParams.get("search") || ""
-  const category = searchParams.get("category") || ""
-  const brand = searchParams.get("brand") || ""
+  const urlCategory = searchParams.get("category") || "all"
+  const urlBrand = searchParams.get("brand") || "all"
   const { toast } = useToast()
   
   const [viewMode, setViewMode] = useState<"grid" | "list" | "3d">("grid")
@@ -56,9 +56,17 @@ export default function ProductsPage() {
   const [showAIRecommendations, setShowAIRecommendations] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [showFilterDrawer, setShowFilterDrawer] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState<string>("all")
-  const [selectedBrand, setSelectedBrand] = useState<string>("all")
+  const [selectedCategory, setSelectedCategory] = useState<string>(urlCategory)
+  const [selectedBrand, setSelectedBrand] = useState<string>(urlBrand)
   const [selectedPrice, setSelectedPrice] = useState<string>("all")
+
+  // Sync selectedCategory and selectedBrand with URL params
+  useEffect(() => {
+    setSelectedCategory(urlCategory)
+  }, [urlCategory])
+  useEffect(() => {
+    setSelectedBrand(urlBrand)
+  }, [urlBrand])
 
   // 3D Background Animation
   useEffect(() => {
