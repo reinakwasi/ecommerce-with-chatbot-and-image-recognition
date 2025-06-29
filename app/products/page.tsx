@@ -17,6 +17,8 @@ import { useSearchParams } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import { ProductGrid } from "@/components/product-grid"
 import { Navigation } from "@/components/navigation"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { categories, brands } from "@/lib/products"
 
 interface Product {
   id: string
@@ -49,6 +51,11 @@ export default function ProductsPage() {
   const [achievements, setAchievements] = useState<string[]>([])
   const [showAIRecommendations, setShowAIRecommendations] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [showFilterDrawer, setShowFilterDrawer] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [selectedBrand, setSelectedBrand] = useState<string>("all")
+  const [selectedPrice, setSelectedPrice] = useState<string>("all")
+  const [selectedRating, setSelectedRating] = useState<number>(0)
 
   // 3D Background Animation
   useEffect(() => {
@@ -206,6 +213,135 @@ export default function ProductsPage() {
       setUserPoints(prev => prev + 50)
     }
   }
+
+  // Filtered ProductGrid props
+  const productGridProps = {
+    searchQuery,
+    category: selectedCategory,
+    brand: selectedBrand,
+    viewMode,
+    onQuickView: handleVirtualTryOn,
+    livePrices,
+  }
+
+  // Filter UI
+  const FilterSidebar = (
+    <aside className="hidden lg:block w-72 flex-shrink-0 sticky top-32 z-10">
+      <div className="bg-white/90 dark:bg-gray-900/90 rounded-xl shadow-soft p-6 mb-8">
+        <h3 className="text-xl font-bold mb-4 text-orange-600">Filters</h3>
+        {/* Category */}
+        <div className="mb-6">
+          <h4 className="font-semibold mb-2 text-orange-500">Category</h4>
+          <div className="flex flex-col gap-2">
+            <Button variant={selectedCategory === "all" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedCategory("all")}>All</Button>
+            {categories.map(cat => (
+              <Button key={cat} variant={selectedCategory === cat ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedCategory(cat)}>{cat}</Button>
+            ))}
+          </div>
+        </div>
+        {/* Brand */}
+        <div className="mb-6">
+          <h4 className="font-semibold mb-2 text-orange-500">Brand</h4>
+          <div className="flex flex-col gap-2">
+            <Button variant={selectedBrand === "all" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedBrand("all")}>All</Button>
+            {brands.map(brand => (
+              <Button key={brand} variant={selectedBrand === brand ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedBrand(brand)}>{brand}</Button>
+            ))}
+          </div>
+        </div>
+        {/* Price */}
+        <div className="mb-6">
+          <h4 className="font-semibold mb-2 text-orange-500">Price</h4>
+          <div className="flex flex-col gap-2">
+            <Button variant={selectedPrice === "all" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("all")}>All</Button>
+            <Button variant={selectedPrice === "under-100" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("under-100")}>Under $100</Button>
+            <Button variant={selectedPrice === "100-500" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("100-500")}>$100 - $500</Button>
+            <Button variant={selectedPrice === "500-1000" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("500-1000")}>$500 - $1000</Button>
+            <Button variant={selectedPrice === "over-1000" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("over-1000")}>Over $1000</Button>
+          </div>
+        </div>
+        {/* Rating */}
+        <div className="mb-6">
+          <h4 className="font-semibold mb-2 text-orange-500">Rating</h4>
+          <div className="flex gap-2 flex-wrap">
+            {[5,4,3,2,1].map(star => (
+              <Button key={star} variant={selectedRating === star ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedRating(star)}>
+                {[...Array(star)].map((_,i) => <Star key={i} className="w-4 h-4 text-yellow-400 inline" />)}
+                {star}+
+              </Button>
+            ))}
+            <Button variant={selectedRating === 0 ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedRating(0)}>All</Button>
+          </div>
+        </div>
+        {/* Reset */}
+        <Button variant="outline" className="w-full mt-2" onClick={() => {
+          setSelectedCategory("all"); setSelectedBrand("all"); setSelectedPrice("all"); setSelectedRating(0);
+        }}>Reset Filters</Button>
+      </div>
+    </aside>
+  )
+
+  // Mobile Filter Drawer
+  const FilterDrawer = (
+    <Sheet open={showFilterDrawer} onOpenChange={setShowFilterDrawer}>
+      <SheetTrigger asChild>
+        <Button className="fixed bottom-6 right-6 z-40 bg-orange-500 hover:bg-orange-600 text-white shadow-lg lg:hidden" onClick={() => setShowFilterDrawer(true)}>
+          <Filter className="w-5 h-5 mr-2" /> Filter
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right" className="w-80 bg-white dark:bg-gray-900 p-6">
+        <h3 className="text-xl font-bold mb-4 text-orange-600">Filters</h3>
+        {/* Category */}
+        <div className="mb-6">
+          <h4 className="font-semibold mb-2 text-orange-500">Category</h4>
+          <div className="flex flex-col gap-2">
+            <Button variant={selectedCategory === "all" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedCategory("all")}>All</Button>
+            {categories.map(cat => (
+              <Button key={cat} variant={selectedCategory === cat ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedCategory(cat)}>{cat}</Button>
+            ))}
+          </div>
+        </div>
+        {/* Brand */}
+        <div className="mb-6">
+          <h4 className="font-semibold mb-2 text-orange-500">Brand</h4>
+          <div className="flex flex-col gap-2">
+            <Button variant={selectedBrand === "all" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedBrand("all")}>All</Button>
+            {brands.map(brand => (
+              <Button key={brand} variant={selectedBrand === brand ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedBrand(brand)}>{brand}</Button>
+            ))}
+          </div>
+        </div>
+        {/* Price */}
+        <div className="mb-6">
+          <h4 className="font-semibold mb-2 text-orange-500">Price</h4>
+          <div className="flex flex-col gap-2">
+            <Button variant={selectedPrice === "all" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("all")}>All</Button>
+            <Button variant={selectedPrice === "under-100" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("under-100")}>Under $100</Button>
+            <Button variant={selectedPrice === "100-500" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("100-500")}>$100 - $500</Button>
+            <Button variant={selectedPrice === "500-1000" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("500-1000")}>$500 - $1000</Button>
+            <Button variant={selectedPrice === "over-1000" ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedPrice("over-1000")}>Over $1000</Button>
+          </div>
+        </div>
+        {/* Rating */}
+        <div className="mb-6">
+          <h4 className="font-semibold mb-2 text-orange-500">Rating</h4>
+          <div className="flex gap-2 flex-wrap">
+            {[5,4,3,2,1].map(star => (
+              <Button key={star} variant={selectedRating === star ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedRating(star)}>
+                {[...Array(star)].map((_,i) => <Star key={i} className="w-4 h-4 text-yellow-400 inline" />)}
+                {star}+
+              </Button>
+            ))}
+            <Button variant={selectedRating === 0 ? "default" : "outline"} size="sm" className="justify-start" onClick={() => setSelectedRating(0)}>All</Button>
+          </div>
+        </div>
+        {/* Reset */}
+        <Button variant="outline" className="w-full mt-2" onClick={() => {
+          setSelectedCategory("all"); setSelectedBrand("all"); setSelectedPrice("all"); setSelectedRating(0);
+        }}>Reset Filters</Button>
+      </SheetContent>
+    </Sheet>
+  )
 
   return (
     <div className="min-h-screen bg-gradient-primary relative overflow-hidden">
@@ -451,15 +587,16 @@ export default function ProductsPage() {
       )}
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8 relative" style={{ zIndex: 1 }}>
-        <ProductGrid 
-          searchQuery={searchQuery}
-          category={category}
-          brand={brand}
-          viewMode={viewMode}
-          onQuickView={handleVirtualTryOn}
-          livePrices={livePrices}
-        />
+      <div className="container mx-auto px-4 py-8 relative flex gap-8" style={{ zIndex: 1 }}>
+        {FilterSidebar}
+        <div className="flex-1">
+          <ProductGrid 
+            {...productGridProps}
+            priceRange={selectedPrice}
+            minRating={selectedRating}
+          />
+        </div>
+        {FilterDrawer}
       </div>
 
       {/* Quick View Modal */}
