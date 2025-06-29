@@ -31,6 +31,12 @@ export default function HomePage() {
   // Use shared countdown hook
   const { timeLeft, formatTime, isExpired } = useCountdown(FLASH_SALE_END_TIME)
 
+  const [featuredProducts, setFeaturedProducts] = useState(() => getUniqueProductsBySection('featured', new Set(), 8))
+
+  const handleRefreshFeatured = () => {
+    setFeaturedProducts(getUniqueProductsBySection('featured', new Set(), 8))
+  }
+
   // 3D Background Animation
   useEffect(() => {
     const canvas = canvasRef.current
@@ -78,7 +84,6 @@ export default function HomePage() {
     animate()
   }, [])
 
-  const featuredProducts = getUniqueProductsBySection('featured', new Set(), 8)
   const newArrivals = getUniqueProductsBySection('new', new Set(), 8)
 
   const categoryIcons: Record<string, string> = {
@@ -166,10 +171,10 @@ export default function HomePage() {
                   Start Shopping
                 </Button>
               </Link>
-              <Link href="/categories">
+              <Link href="/about">
                 <Button className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border border-white/30">
-                  <Grid className="w-4 h-4 mr-2" />
-                  Browse Categories
+                  <Users className="w-4 h-4 mr-2" />
+                  About Us
                 </Button>
               </Link>
             </div>
@@ -265,7 +270,13 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-4xl font-bold mb-2">Featured Products</h2>
+              <h2 className="text-4xl font-bold mb-2 flex items-center gap-4">
+                Featured Products
+                <Button size="sm" variant="outline" className="ml-2" onClick={handleRefreshFeatured} title="Refresh Featured Products">
+                  <span className="sr-only">Refresh</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582M20 20v-5h-.581M5.582 9A7.003 7.003 0 0012 19a7 7 0 006.418-4M18.418 15A7.003 7.003 0 0012 5a7 7 0 00-6.418 4" /></svg>
+                </Button>
+              </h2>
               <p className="text-gray-600 dark:text-gray-300">
                 Handpicked items our customers love
               </p>
@@ -277,38 +288,19 @@ export default function HomePage() {
               </Button>
             </Link>
           </div>
-          
           <ProductGrid products={featuredProducts} limit={8} showFilters={false} />
         </div>
       </section>
 
-      {/* Interactive Categories */}
-      <section id="categories" className="py-16 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 relative" style={{ zIndex: 1 }}>
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Explore Categories</h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              Discover our wide range of product categories
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-            {categoriesWithCounts.map((category, idx) => (
-              <Link key={category.name} href={`/products?category=${category.name}`}>
-                <Card className="group cursor-pointer border-0 shadow-soft hover:shadow-2xl transition-all duration-500 hover:-translate-y-4 bg-white/80 backdrop-blur-sm hover:bg-white">
-                  <CardContent className="p-6 text-center relative overflow-hidden">
-                    <div className="text-5xl mb-4 group-hover:scale-125 transition-transform duration-500">
-                      {category.icon}
-                    </div>
-                    <h3 className="font-bold mb-2 group-hover:text-orange-600 transition-colors text-lg">
-                      {category.name}
-                    </h3>
-                    <p className="text-sm text-gray-500">{category.count} products</p>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
+      {/* Shop by Categories Prompt */}
+      <section className="py-16 bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-950 dark:to-orange-950 relative" style={{ zIndex: 1 }}>
+        <div className="container mx-auto px-4 flex flex-col items-center justify-center text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-orange-700 dark:text-orange-200">Do you want to shop by categories?</h2>
+          <Link href="/categories">
+            <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-8 py-4 rounded-full shadow-lg">
+              Click here to browse categories
+            </Button>
+          </Link>
         </div>
       </section>
 
