@@ -7,9 +7,11 @@ import { Progress } from "@/components/ui/progress";
 import { Navigation as NavComponent } from "@/components/navigation";
 import { products } from "@/lib/products";
 import Link from "next/link";
+import { useCountdown } from "@/hooks/use-countdown";
+import { FLASH_SALE_DATA } from "@/lib/flash-sale-data";
 import { 
   Clock, 
-  Fire, 
+  Flame as Fire, 
   TrendingDown, 
   Star, 
   ShoppingCart, 
@@ -27,7 +29,7 @@ import {
   Target,
   Award,
   Crown,
-  Lightning,
+  Zap as Lightning,
   Bell,
   BellOff,
   Play,
@@ -52,27 +54,9 @@ import {
   ThumbsDown
 } from "lucide-react";
 
-// Mock deals data with enhanced features
+// Mock deals data with enhanced features - using shared flash sale data
 const dealsData = [
-  {
-    id: 1,
-    name: "iPhone 15 Pro Max - Flash Sale",
-    originalPrice: 1299,
-    currentPrice: 899,
-    discount: 31,
-    image: "/phones and accessories/iphone 15 pro max.webp",
-    category: "Phones and Accessories",
-    endTime: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours from now
-    type: "flash",
-    stock: 15,
-    sold: 8,
-    rating: 4.8,
-    reviews: 1247,
-    features: ["5G Ready", "Pro Camera", "A17 Pro Chip"],
-    urgency: "high",
-    badge: "FLASH SALE",
-    badgeColor: "from-red-500 to-pink-500"
-  },
+  FLASH_SALE_DATA, // Use shared flash sale data
   {
     id: 2,
     name: "Premium Denim Collection",

@@ -7,22 +7,29 @@ import { Badge } from "@/components/ui/badge"
 import { 
   Search, Sparkles, ShoppingBag, Users, TrendingUp, ArrowRight, 
   Star, Heart, ShoppingCart, Zap, Shield, Truck, Gift, Clock,
-  Crown, Target, Award, Lightning,
-  MessageCircle, Eye, Share2, Bell, Grid, List, Fire, Rocket,
+  Crown, Target, Award, Zap as Lightning,
+  MessageCircle, Eye, Share2, Bell, Grid, List, Flame as Fire, Rocket,
   Globe, Lock, Wifi, Battery, Signal, CheckCircle, Package,
   CreditCard, MapPin, Calendar, Timer, Gift as GiftIcon
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { SmartSearchBar } from "@/components/smart-search-bar"
 import { ProductGrid } from "@/components/product-grid"
 import { Navigation } from "@/components/navigation"
 import { ProductRecommendations } from "@/components/product-recommendations"
 import { getUniqueProductsBySection } from "@/lib/products"
 import { products, categories as productCategories } from "@/lib/products"
+import { useCountdown } from "@/hooks/use-countdown"
+import { FLASH_SALE_END_TIME } from "@/lib/flash-sale-data"
 
 export default function HomePage() {
   const [userPoints, setUserPoints] = useState(1250)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const router = useRouter()
+  
+  // Use shared countdown hook
+  const { timeLeft, formatTime, isExpired } = useCountdown(FLASH_SALE_END_TIME)
 
   // 3D Background Animation
   useEffect(() => {
@@ -210,33 +217,48 @@ export default function HomePage() {
       </section>
 
       {/* Live Deal Countdown */}
-      <section className="py-8 bg-gradient-to-r from-red-500 to-pink-500 text-white relative" style={{ zIndex: 1 }}>
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-8">
-            <div className="text-center">
-              <div className="text-3xl font-bold">Flash Sale</div>
-              <div className="text-sm opacity-80">Ends in 2:45:30</div>
+      {!isExpired && (
+        <section className="py-8 bg-gradient-to-r from-red-500 to-pink-500 text-white relative" style={{ zIndex: 1 }}>
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-center gap-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold flex items-center gap-2">
+                  <Fire className="w-8 h-8 animate-pulse" />
+                  Flash Sale
+                </div>
+                <div className="text-sm opacity-80">Ends in {formatTime(timeLeft.hours)}:{formatTime(timeLeft.minutes)}:{formatTime(timeLeft.seconds)}</div>
+              </div>
+              <div className="flex gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold">{formatTime(timeLeft.hours)}</div>
+                  <div className="text-xs">Hours</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold">{formatTime(timeLeft.minutes)}</div>
+                  <div className="text-xs">Minutes</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold">{formatTime(timeLeft.seconds)}</div>
+                  <div className="text-xs">Seconds</div>
+                </div>
+              </div>
+              <Button 
+                className="bg-white text-red-500 hover:bg-red-50 font-semibold px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                onClick={() => {
+                  console.log('Shop Now clicked!');
+                  router.push('/deals');
+                }}
+              >
+                <Fire className="w-4 h-4 mr-2" />
+                Shop Now
+              </Button>
             </div>
-            <div className="flex gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold">02</div>
-                <div className="text-xs">Hours</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">45</div>
-                <div className="text-xs">Minutes</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">30</div>
-                <div className="text-xs">Seconds</div>
-              </div>
+            <div className="text-center mt-4 text-sm opacity-70">
+              ⚡ Click to view all deals and save big! ⚡
             </div>
-            <Button className="bg-white text-red-500 hover:bg-red-50">
-              Shop Now
-            </Button>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Featured Products */}
       <section className="py-16 bg-white dark:bg-gray-900 relative" style={{ zIndex: 1 }}>
@@ -311,4 +333,4 @@ export default function HomePage() {
       `}</style>
     </div>
   )
-} 
+}

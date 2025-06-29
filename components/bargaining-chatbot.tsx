@@ -33,6 +33,7 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
   const [isTyping, setIsTyping] = useState(false)
   const [currentPrice, setCurrentPrice] = useState(product.price)
   const [negotiationCount, setNegotiationCount] = useState(0)
+  const [showScrollButton, setShowScrollButton] = useState(false)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const { toast } = useToast()
 
@@ -51,9 +52,50 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
 
   useEffect(() => {
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight
+      const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement
+      if (scrollElement) {
+        scrollElement.scrollTop = scrollElement.scrollHeight
+      } else {
+        // Fallback to direct scroll
+        scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight
+      }
     }
-  }, [messages])
+  }, [messages, isTyping])
+
+  // Additional scroll effect when typing starts/stops
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement
+      if (scrollElement) {
+        setTimeout(() => {
+          scrollElement.scrollTop = scrollElement.scrollHeight
+        }, 100)
+      }
+    }
+  }, [isTyping])
+
+  const handleScroll = () => {
+    if (scrollAreaRef.current) {
+      const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement
+      if (scrollElement) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollElement
+        const isScrolledUp = scrollTop + clientHeight < scrollHeight - 50
+        setShowScrollButton(isScrolledUp)
+      }
+    }
+  }
+
+  const scrollToBottom = () => {
+    if (scrollAreaRef.current) {
+      const scrollElement = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement
+      if (scrollElement) {
+        scrollElement.scrollTo({
+          top: scrollElement.scrollHeight,
+          behavior: 'smooth'
+        })
+      }
+    }
+  }
 
   const generateBotResponse = (userMessage: string): Message => {
     const lowerMessage = userMessage.toLowerCase()
@@ -156,7 +198,7 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-md h-[600px] flex flex-col">
+      <Card className="w-full max-w-md h-[600px] flex flex-col overflow-hidden relative">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center">
@@ -169,7 +211,7 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
           </Button>
         </CardHeader>
 
-        <CardContent className="flex-1 flex flex-col p-0">
+        <CardContent className="flex-1 flex flex-col p-0 overflow-auto">
           {/* Price Display */}
           <div className="px-4 py-3 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950 border-b">
             <div className="text-center">
@@ -185,58 +227,77 @@ export function BargainingChatbot({ isOpen, onClose, product }: BargainingChatbo
           </div>
 
           {/* Messages */}
-          <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-            <div className="space-y-4">
-              {messages.map((message) => (
-                <div key={message.id} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
-                  <div
-                    className={`max-w-[80%] rounded-lg p-3 ${
-                      message.type === "user"
-                        ? "bg-orange-600 text-white"
-                        : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-                    }`}
-                  >
-                    <div className="flex items-start gap-2">
-                      {message.type === "bot" && <Bot className="w-4 h-4 mt-0.5 text-orange-600" />}
-                      {message.type === "user" && <User className="w-4 h-4 mt-0.5" />}
-                      <div className="flex-1">
-                        <p className="text-sm">{message.content}</p>
-                        {message.priceOffer && (
-                          <Button size="sm" className="mt-2 bg-green-600 hover:bg-green-700" onClick={handleAcceptDeal}>
-                            Accept ${message.priceOffer}
-                          </Button>
-                        )}
+          <div className="relative flex-1 overflow-auto">
+            <ScrollArea className="flex-1 p-4" ref={scrollAreaRef} onScroll={handleScroll} style={{height: '100%'}}>
+              <div className="space-y-4">
+                {messages.map((message) => (
+                  <div key={message.id} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
+                    <div
+                      className={`max-w-[80%] rounded-lg p-3 ${
+                        message.type === "user"
+                          ? "bg-orange-600 text-white"
+                          : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        {message.type === "bot" && <Bot className="w-4 h-4 mt-0.5 text-orange-600" />}
+                        {message.type === "user" && <User className="w-4 h-4 mt-0.5" />}
+                        <div className="flex-1">
+                          <p className="text-sm">
+                            {/* Only show the message content, never render price offers as plain text or emoji buttons */}
+                            {message.content}
+                          </p>
+                          {/* Only show the Accept button for price offers, never as a separate message or emoji */}
+                          {message.priceOffer && message.type === "bot" && (
+                            <Button size="sm" className="mt-2 bg-green-600 hover:bg-green-700" onClick={handleAcceptDeal}>
+                              Accept ${message.priceOffer}
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[80%]">
-                    <div className="flex items-center gap-2">
-                      <Bot className="w-4 h-4 text-orange-600" />
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.1s" }}
-                        ></div>
-                        <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.2s" }}
-                        ></div>
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 max-w-[80%]">
+                      <div className="flex items-center gap-2">
+                        <Bot className="w-4 h-4 text-orange-600" />
+                        <div className="flex space-x-1">
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "0.1s" }}
+                          ></div>
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "0.2s" }}
+                          ></div>
+                        </div>
                       </div>
                     </div>
                   </div>
+                )}
+              </div>
+
+              {/* Scroll to Bottom Button */}
+              {showScrollButton && (
+                <div className="fixed md:absolute bottom-24 right-8 z-10">
+                  <Button
+                    size="sm"
+                    className="rounded-full w-10 h-10 p-0 bg-orange-500 hover:bg-orange-600 text-white shadow-lg"
+                    onClick={scrollToBottom}
+                  >
+                    ↓
+                  </Button>
                 </div>
               )}
-            </div>
-          </ScrollArea>
+            </ScrollArea>
+          </div>
 
           {/* Input */}
-          <div className="p-4 border-t">
+          <div className="p-4 border-t bg-white dark:bg-gray-900">
             <div className="flex gap-2">
               <Input
                 value={inputValue}
