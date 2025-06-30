@@ -20,11 +20,14 @@ import {
   Settings,
   CreditCard,
   MapPin,
-  Navigation,
+  Home,
+  LogOut,
+  Sparkles,
+  LayoutDashboard,
 } from "lucide-react"
 import Image from "next/image"
-import { SmartSearchBar } from "@/components/smart-search-bar"
 import { Navigation as NavComponent } from "@/components/navigation"
+import Link from "next/link"
 
 export default function CustomerDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
@@ -138,42 +141,47 @@ export default function CustomerDashboard() {
 
       {/* Header */}
       <header className="bg-white/90 dark:bg-gray-800/90 border-b border-orange-100 dark:border-gray-700 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container-responsive py-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back, John!</h1>
-              <p className="text-gray-600 dark:text-gray-300">Discover amazing products with smart assistance</p>
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center shadow-lg">
+                <User className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">John's Dashboard</h1>
+                <p className="text-gray-600 dark:text-gray-300">Welcome back! Manage your orders, wishlist, and profile.</p>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" onClick={() => (window.location.href = "/customer/wishlist")} className="hover:bg-orange-50 dark:hover:bg-orange-900/20">
-                <Heart className="w-4 h-4 mr-2 text-orange-600" />
-                Wishlist ({wishlistItems.length})
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => (window.location.href = "/customer/cart")} className="hover:bg-orange-50 dark:hover:bg-orange-900/20">
-                <ShoppingBag className="w-4 h-4 mr-2 text-orange-600" />
-                Cart (2)
-              </Button>
+            <div className="flex items-center space-x-2">
+              <Link href="/">
+                <Button variant="outline" className="border-orange-200 text-orange-700 hover:bg-orange-50 dark:border-orange-700 dark:text-orange-300 dark:hover:bg-orange-900/20">
+                  <Home className="w-4 h-4 mr-2" />
+                  Back to Shop
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Smart Search */}
-        <div className="mb-8">
-          <SmartSearchBar />
-        </div>
-
+      <div className="container-responsive py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300">Overview</TabsTrigger>
-            <TabsTrigger value="orders" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300">My Orders</TabsTrigger>
-            <TabsTrigger value="wishlist" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300">Wishlist</TabsTrigger>
-            <TabsTrigger value="recommendations" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300">For You</TabsTrigger>
-            <TabsTrigger value="profile" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300">Profile</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-sm">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300 flex items-center gap-2">
+              <LayoutDashboard className="w-4 h-4" /> Overview
+            </TabsTrigger>
+            <TabsTrigger value="orders" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300 flex items-center gap-2">
+              <Package className="w-4 h-4" /> My Orders
+            </TabsTrigger>
+            <TabsTrigger value="wishlist" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300 flex items-center gap-2">
+              <Heart className="w-4 h-4" /> Wishlist
+            </TabsTrigger>
+            <TabsTrigger value="profile" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300 flex items-center gap-2">
+              <Settings className="w-4 h-4" /> Profile & Settings
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="mt-6 space-y-6">
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-orange-100 dark:border-gray-700">
@@ -243,44 +251,26 @@ export default function CustomerDashboard() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
 
-          <TabsContent value="orders" className="space-y-6">
             <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-orange-100 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>All Orders</CardTitle>
-                <CardDescription>View and track all your orders</CardDescription>
+                <CardTitle className="flex items-center gap-2"><Sparkles className="w-5 h-5 text-amber-500" /> For You</CardTitle>
+                <CardDescription>Personalized recommendations based on your activity.</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {recentOrders.map((order) => (
-                    <div key={order.id} className="flex items-center space-x-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                      <Image
-                        src={order.image}
-                        alt={order.product}
-                        width={80}
-                        height={80}
-                        className="rounded-lg object-cover"
-                      />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {recommendations.map(item => (
+                    <div key={item.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20">
+                      <Image src={item.image} alt={item.name} width={80} height={80} className="rounded-lg object-cover" />
                       <div className="flex-1">
-                        <h4 className="font-medium text-gray-900 dark:text-white">{order.product}</h4>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">Order #{order.id} • {order.date}</p>
-                        <p className="text-lg font-semibold text-orange-600">${order.price}</p>
-                      </div>
-                      <div className="flex flex-col items-end space-y-2">
-                        <div className="flex items-center space-x-2">
-                          {getStatusIcon(order.status)}
-                          <Badge variant={getStatusColor(order.status) as any} className="capitalize">
-                            {order.status}
-                          </Badge>
+                        <h4 className="font-semibold text-gray-900 dark:text-white">{item.name}</h4>
+                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                          <span className="font-bold text-green-600">${item.price}</span>
+                          {item.originalPrice && <span className="line-through text-xs">${item.originalPrice}</span>}
                         </div>
-                        {order.rating && (
-                          <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                            <span className="text-sm text-gray-600 dark:text-gray-300">{order.rating}</span>
-                          </div>
-                        )}
+                        <div className="text-xs text-gray-500 italic mt-1">{item.reason}</div>
                       </div>
+                      <Button size="sm" variant="outline" className="self-start">View</Button>
                     </div>
                   ))}
                 </div>
@@ -288,129 +278,120 @@ export default function CustomerDashboard() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="wishlist" className="space-y-6">
+          <TabsContent value="orders" className="mt-6">
+            <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-orange-100 dark:border-gray-700">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>My Orders</CardTitle>
+                  <CardDescription>View and manage all your past and current orders.</CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Input placeholder="Search orders..." className="w-64 input-enhanced" />
+                  <Button variant="outline"><Filter className="w-4 h-4 mr-2" /> Filter</Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="border rounded-lg overflow-hidden">
+                  <table className="min-w-full divide-y divide-orange-100 dark:divide-gray-700">
+                    <thead className="bg-orange-50 dark:bg-gray-800">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Product</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Price</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                        <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-orange-100 dark:divide-gray-700">
+                      {recentOrders.map((order) => (
+                        <tr key={order.id}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{order.product}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${order.price}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">{order.date}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <Badge variant={getStatusColor(order.status) as any} className="capitalize flex items-center gap-2">
+                              {getStatusIcon(order.status)}
+                              {order.status}
+                            </Badge>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <Button variant="outline" size="sm" className="mr-2">View Order</Button>
+                            {order.rating ? (
+                              <div className="flex items-center justify-end text-amber-500">
+                                {[...Array(order.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                              </div>
+                            ) : (
+                              <Button variant="default" size="sm" className="btn-primary">Rate</Button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="wishlist" className="mt-6">
             <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-orange-100 dark:border-gray-700">
               <CardHeader>
                 <CardTitle>My Wishlist</CardTitle>
-                <CardDescription>Items you've saved for later</CardDescription>
+                <CardDescription>Your saved items. Don't let them get away!</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {wishlistItems.map((item) => (
-                    <div key={item.id} className="bg-white dark:bg-gray-700 rounded-lg p-4 shadow-soft border border-gray-100 dark:border-gray-600">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={100}
-                        height={100}
-                        className="rounded-lg object-cover w-full mb-4"
-                      />
-                      <h4 className="font-medium text-gray-900 dark:text-white mb-2">{item.name}</h4>
-                      <div className="flex items-center space-x-2 mb-3">
-                        <span className="text-lg font-bold text-orange-600">${item.price}</span>
-                        {item.originalPrice && (
-                          <span className="text-sm text-gray-500 line-through">${item.originalPrice}</span>
-                        )}
+                  {wishlistItems.map(item => (
+                    <Card key={item.id} className="overflow-hidden">
+                      <Image src={item.image} alt={item.name} width={300} height={200} className="w-full h-40 object-cover" />
+                      <div className="p-4">
+                        <h4 className="font-semibold text-gray-900 dark:text-white line-clamp-1">{item.name}</h4>
+                        <div className="flex items-center gap-2 mt-2">
+                          <span className="font-bold text-green-600 text-lg">${item.price}</span>
+                          {item.originalPrice && <span className="line-through text-sm text-gray-500">${item.originalPrice}</span>}
+                        </div>
+                        <div className="mt-4 flex gap-2">
+                          <Button size="sm" className="flex-1 btn-primary" disabled={!item.inStock}>{item.inStock ? "Add to Cart" : "Out of Stock"}</Button>
+                          <Button size="sm" variant="outline"><Heart className="w-4 h-4" /></Button>
+                        </div>
                       </div>
-                      <div className="flex space-x-2">
-                        <Button size="sm" className="btn-primary flex-1">
-                          Add to Cart
-                        </Button>
-                        <Button size="sm" variant="outline" className="border-orange-200 text-orange-600 hover:bg-orange-50">
-                          <Heart className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="recommendations" className="space-y-6">
+          <TabsContent value="profile" className="mt-6">
             <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-orange-100 dark:border-gray-700">
               <CardHeader>
-                <CardTitle>Recommended for You</CardTitle>
-                <CardDescription>Personalized suggestions based on your preferences</CardDescription>
+                <CardTitle>Profile & Settings</CardTitle>
+                <CardDescription>Manage your personal information, addresses, and payment methods.</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {recommendations.map((item) => (
-                    <div key={item.id} className="bg-white dark:bg-gray-700 rounded-lg p-4 shadow-soft border border-gray-100 dark:border-gray-600">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={100}
-                        height={100}
-                        className="rounded-lg object-cover w-full mb-4"
-                      />
-                      <h4 className="font-medium text-gray-900 dark:text-white mb-2">{item.name}</h4>
-                      <div className="flex items-center space-x-2 mb-2">
-                        <span className="text-lg font-bold text-orange-600">${item.price}</span>
-                        {item.originalPrice && (
-                          <span className="text-sm text-gray-500 line-through">${item.originalPrice}</span>
-                        )}
-                      </div>
-                      <div className="flex items-center space-x-1 mb-3">
-                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                        <span className="text-sm text-gray-600 dark:text-gray-300">{item.rating}</span>
-                      </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{item.reason}</p>
-                      <div className="flex space-x-2">
-                        <Button size="sm" className="btn-primary flex-1">
-                          Add to Cart
-                        </Button>
-                        <Button size="sm" variant="outline" className="border-orange-200 text-orange-600 hover:bg-orange-50">
-                          <Heart className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+              <CardContent className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Personal Information</h3>
+                  <div>
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input id="name" defaultValue="John Doe" className="input-enhanced" />
+                  </div>
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" defaultValue="john.doe@example.com" className="input-enhanced" />
+                  </div>
+                  <Button className="btn-primary">Update Profile</Button>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="profile" className="space-y-6">
-            <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-orange-100 dark:border-gray-700">
-              <CardHeader>
-                <CardTitle>Profile Settings</CardTitle>
-                <CardDescription>Manage your account information</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center">
-                      <User className="w-8 h-8 text-orange-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-900 dark:text-white">John Doe</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">john.doe@example.com</p>
-                    </div>
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Shipping Address</h3>
+                  <div>
+                    <Label htmlFor="address">Address</Label>
+                    <Input id="address" defaultValue="123 Smart St" className="input-enhanced" />
                   </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="name" className="text-sm font-medium">Full Name</Label>
-                      <Input id="name" defaultValue="John Doe" className="input-enhanced" />
-                    </div>
-                    <div>
-                      <Label htmlFor="email" className="text-sm font-medium">Email</Label>
-                      <Input id="email" defaultValue="john.doe@example.com" className="input-enhanced" />
-                    </div>
-                    <div>
-                      <Label htmlFor="phone" className="text-sm font-medium">Phone</Label>
-                      <Input id="phone" defaultValue="+233 595 354 747" className="input-enhanced" />
-                    </div>
-                    <div>
-                      <Label htmlFor="address" className="text-sm font-medium">Address</Label>
-                      <Input id="address" defaultValue="Accra, Ghana" className="input-enhanced" />
-                    </div>
+                  <div>
+                    <Label htmlFor="city">City</Label>
+                    <Input id="city" defaultValue="Accra" className="input-enhanced" />
                   </div>
-                  
-                  <Button className="btn-primary">
-                    Save Changes
-                  </Button>
+                  <Button variant="outline">Manage Addresses</Button>
                 </div>
               </CardContent>
             </Card>
