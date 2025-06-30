@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -40,23 +40,27 @@ import {
 import { useTheme } from "next-themes"
 import { SmartSearchBar } from "./smart-search-bar"
 
+interface User {
+  id: string
+  name: string
+  email: string
+  role: "customer" | "seller" | "admin"
+  avatar?: string
+}
+
 interface NavigationProps {
-  user?: {
-    id: string
-    name: string
-    email: string
-    role: "customer" | "seller" | "admin"
-    avatar?: string
-  }
+  initialUser?: User
   cartCount?: number
   wishlistCount?: number
 }
 
-export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: NavigationProps) {
+export function Navigation({ initialUser, cartCount = 0, wishlistCount = 0 }: NavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(initialUser || null)
   const pathname = usePathname()
+  const router = useRouter()
   const { theme, setTheme } = useTheme()
 
   useEffect(() => {
@@ -67,6 +71,11 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const handleLogout = () => {
+    setUser(null)
+    router.push("/")
+  }
 
   const navigationItems = [
     { name: "Products", href: "/products" },
@@ -228,7 +237,10 @@ export function Navigation({ user, cartCount = 0, wishlistCount = 0 }: Navigatio
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="flex items-center text-red-600 dark:text-red-400">
+                    <DropdownMenuItem 
+                      className="flex items-center text-red-600 dark:text-red-400 cursor-pointer"
+                      onClick={handleLogout}
+                    >
                       <LogOut className="w-4 h-4 mr-2" />
                       Sign Out
                     </DropdownMenuItem>

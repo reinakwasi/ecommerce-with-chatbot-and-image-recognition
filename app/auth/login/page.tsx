@@ -31,20 +31,8 @@ export default function LoginPage() {
         description: `Welcome back to SmartShop!`,
       })
 
-      // Redirect based on user type
-      switch (userType) {
-        case "customer":
-          router.push("/customer/dashboard")
-          break
-        case "seller":
-          router.push("/seller/dashboard")
-          break
-        case "admin":
-          router.push("/admin/dashboard")
-          break
-        default:
-          router.push("/")
-      }
+      // Redirect to the homepage for all user types
+      router.push("/")
     }, 2000)
   }
 

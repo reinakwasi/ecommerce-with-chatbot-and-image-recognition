@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   ShoppingBag,
   Heart,
@@ -133,7 +134,7 @@ export default function CustomerDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-primary">
-      <NavComponent />
+      <NavComponent initialUser={{ id: "1", name: "John Doe", email: "john@example.com", role: "customer" }} />
 
       {/* Header */}
       <header className="bg-white/90 dark:bg-gray-800/90 border-b border-orange-100 dark:border-gray-700 backdrop-blur-sm">

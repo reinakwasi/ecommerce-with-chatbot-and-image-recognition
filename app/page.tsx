@@ -117,7 +117,7 @@ export default function HomePage() {
       />
 
       {/* Navigation */}
-      <Navigation />
+      <Navigation initialUser={{ id: "1", name: "John Doe", email: "john@example.com", role: "customer" }} cartCount={2} wishlistCount={5} />
 
       {/* Hero Section with 3D Effects */}
       <section className="relative py-20 bg-gradient-to-br from-orange-500/90 via-amber-500/90 to-yellow-500/90" style={{ zIndex: 1 }}>
