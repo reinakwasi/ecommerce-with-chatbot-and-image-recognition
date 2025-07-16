@@ -62,6 +62,12 @@ export function Navigation({ initialUser, cartCount = 0, wishlistCount = 0 }: Na
   const pathname = usePathname()
   const router = useRouter()
   const { theme, setTheme } = useTheme()
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const mockNotifications = [
+    { id: 1, title: "Order Shipped", description: "Your order #12345 has been shipped." },
+    { id: 2, title: "New Deal!", description: "Flash sale on Smart Watches!" },
+    { id: 3, title: "Wishlist Discount", description: "An item in your wishlist is on sale." },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -126,12 +132,29 @@ export function Navigation({ initialUser, cartCount = 0, wishlistCount = 0 }: Na
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-4">
               {/* Notifications */}
-              <Button variant="ghost" size="sm" className="relative group" aria-label="Notifications">
-                <Bell className="w-4 h-4" />
-                <span className="sr-only">Notifications</span>
-                <span className="absolute left-1/2 -bottom-7 -translate-x-1/2 scale-0 group-hover:scale-100 bg-gray-900 text-white text-xs rounded px-2 py-1 transition-all">Notifications</span>
-                <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs">3</Badge>
-              </Button>
+              <DropdownMenu open={isNotificationOpen} onOpenChange={setIsNotificationOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className={`relative group ${isNotificationOpen ? 'bg-orange-50 dark:bg-orange-900/20' : ''}`} aria-label="Notifications">
+                    <Bell className={`w-4 h-4 ${isNotificationOpen ? 'text-orange-600 dark:text-orange-400' : ''}`} />
+                    <span className="sr-only">Notifications</span>
+                    <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs">{mockNotifications.length}</Badge>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-80">
+                  <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {mockNotifications.length === 0 ? (
+                    <DropdownMenuItem className="text-gray-500">No notifications</DropdownMenuItem>
+                  ) : (
+                    mockNotifications.map((notif) => (
+                      <DropdownMenuItem key={notif.id} className="flex flex-col items-start gap-1 py-2">
+                        <span className="font-semibold text-sm">{notif.title}</span>
+                        <span className="text-xs text-gray-500">{notif.description}</span>
+                      </DropdownMenuItem>
+                    ))
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               {/* Wishlist */}
               <Link href="/customer/wishlist" aria-label="Wishlist">
