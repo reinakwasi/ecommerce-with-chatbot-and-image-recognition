@@ -305,12 +305,9 @@ export default function CustomerDashboard() {
       </header>
       <div className="container-responsive py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-sm">
+          <TabsList className="grid w-full grid-cols-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-sm">
             <TabsTrigger value="overview" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300 flex items-center gap-2">
               <LayoutDashboard className="w-4 h-4" /> Overview
-            </TabsTrigger>
-            <TabsTrigger value="orders" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300 flex items-center gap-2">
-              <Package className="w-4 h-4" /> My Orders
             </TabsTrigger>
             <TabsTrigger value="wishlist" className="data-[state=active]:bg-orange-100 data-[state=active]:text-orange-700 dark:data-[state=active]:bg-orange-900/20 dark:data-[state=active]:text-orange-300 flex items-center gap-2">
               <Heart className="w-4 h-4" /> Wishlist
@@ -460,141 +457,6 @@ export default function CustomerDashboard() {
                 </div>
               )}
             </div>
-          </TabsContent>
-
-          <TabsContent value="orders" className="mt-6">
-            <Card className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-orange-100 dark:border-gray-700">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle>My Orders</CardTitle>
-                  <CardDescription>View and manage all your past and current orders.</CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Input
-                    placeholder="Search orders..."
-                    className="w-64 input-enhanced"
-                    value={orderSearch}
-                    onChange={e => setOrderSearch(e.target.value)}
-                  />
-                  <select
-                    className="border rounded px-2 py-1 text-sm bg-white dark:bg-gray-800"
-                    value={orderStatusFilter}
-                    onChange={e => setOrderStatusFilter(e.target.value)}
-                  >
-                    <option value="all">All</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="processing">Processing</option>
-                  </select>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {ordersLoading ? (
-                  <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                    <Loader2 className="w-8 h-8 animate-spin mb-2" />
-                    <div>Loading orders...</div>
-                  </div>
-                ) : ordersError ? (
-                  <div className="flex flex-col items-center justify-center py-12 text-red-400">
-                    <Inbox className="w-12 h-12 mb-2" />
-                    <div className="font-semibold text-lg">{ordersError}</div>
-                    <div className="text-sm">Please refresh the page or try again later.</div>
-                  </div>
-                ) : filteredOrders.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                    <Inbox className="w-12 h-12 mb-2" />
-                    <div className="font-semibold text-lg">No orders found</div>
-                    <div className="text-sm">Try adjusting your search or filter.</div>
-                  </div>
-                ) : (
-                  <div className="border rounded-lg overflow-hidden">
-                    <table className="min-w-full divide-y divide-orange-100 dark:divide-gray-700">
-                      <thead className="bg-orange-50 dark:bg-gray-800">
-                        <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Product</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Price</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                          <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white dark:bg-gray-800 divide-y divide-orange-100 dark:divide-gray-700">
-                        {filteredOrders.map((order) => (
-                          <tr key={order.id}>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{order.product}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${order.price}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">{order.date}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                              <Badge variant={getStatusColor(order.status) as any} className="capitalize flex items-center gap-2">
-                                {getStatusIcon(order.status)}
-                                {order.status}
-                              </Badge>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                              <Button variant="outline" size="sm" className="mr-2" onClick={() => { setSelectedOrder(order); setIsOrderDialogOpen(true); }}>View Order</Button>
-                              {order.rating ? (
-                                <div className="flex items-center justify-end text-amber-500">
-                                  {[...Array(order.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                                </div>
-                              ) : order.status.toLowerCase() === "delivered" ? (
-                                <Button variant="default" size="sm" className="btn-primary" onClick={() => { setRatingOrder(order); setIsRatingDialogOpen(true); }}>Rate</Button>
-                              ) : null}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-                {/* Order Details Dialog with stepper */}
-                <Dialog open={isOrderDialogOpen} onOpenChange={setIsOrderDialogOpen}>
-                  <DialogContent className="max-w-lg">
-                    <DialogHeader>
-                      <DialogTitle>Order Details</DialogTitle>
-                      <DialogDescription>
-                        {selectedOrder ? (
-                          <div className="space-y-2 mt-2">
-                            <div className="flex items-center gap-4">
-                              <Image src={selectedOrder.image} alt={selectedOrder.product} width={60} height={60} className="rounded-lg object-cover" />
-                              <div>
-                                <div className="font-semibold text-lg">{selectedOrder.product}</div>
-                                <div className="text-sm text-gray-500">Order ID: {selectedOrder.id}</div>
-                              </div>
-                            </div>
-                            {/* Order Tracking Stepper */}
-                            <div className="flex items-center justify-between mt-4 mb-2">
-                              {['Ordered', 'Shipped', 'Out for Delivery', 'Delivered'].map((step, idx) => {
-                                const statusIdx = ['ordered', 'shipped', 'out for delivery', 'delivered'].indexOf(selectedOrder.status.toLowerCase());
-                                const isActive = idx <= statusIdx;
-                                return (
-                                  <div key={step} className="flex-1 flex flex-col items-center">
-                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${isActive ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-700'}`}>{idx + 1}</div>
-                                    <span className={`text-xs mt-1 ${isActive ? 'text-orange-600 font-semibold' : 'text-gray-400'}`}>{step}</span>
-                                    {idx < 3 && <div className={`h-1 w-full ${isActive ? 'bg-orange-400' : 'bg-gray-200 dark:bg-gray-700'}`}></div>}
-                                  </div>
-                                );
-                              })}
-                            </div>
-                            <div className="flex gap-4 mt-2">
-                              <div className="text-sm">Price: <span className="font-bold">${selectedOrder.price}</span></div>
-                              <div className="text-sm">Status: <Badge variant={getStatusColor(selectedOrder.status) as any}>{selectedOrder.status}</Badge></div>
-                            </div>
-                            <div className="text-sm text-gray-500">Order Date: {selectedOrder.date}</div>
-                            <div className="text-sm text-gray-500">Shipping Address: 123 Smart St, Accra</div>
-                            <div className="text-sm text-gray-500">Payment Method: Credit Card</div>
-                          </div>
-                        ) : (
-                          <span>No order selected.</span>
-                        )}
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogClose asChild>
-                      <Button variant="outline" className="mt-4 w-full">Close</Button>
-                    </DialogClose>
-                  </DialogContent>
-                </Dialog>
-              </CardContent>
-            </Card>
           </TabsContent>
 
           <TabsContent value="wishlist" className="mt-6">
